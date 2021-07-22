@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1005166683847",
+    "project_id": "procastiless",
+    "storage_bucket": "procastiless.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005166683847:android:3b09bd77c7e0b4b1fc00e2",
+        "android_client_info": {
+          "package_name": "com.example.procastiless"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005166683847-g0g2i5aglg2k4544kqdolu1cp361a4c8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1cvEzJhIwC2iY_eJBd95M7qecP-s3IGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005166683847-g0g2i5aglg2k4544kqdolu1cp361a4c8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
