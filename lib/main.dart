@@ -2,10 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:procastiless/widgets/splash-widget.dart';
 
+import 'config/themes/defaultapptheme.dart';
+import 'config/themes/theme defiintions/maintheme.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MaterialApp(
+      theme: ThemeManager().createDefaultTheme(MainTheme()),
       title: 'Procastiless',
       home: Scaffold(
         body: SafeArea(child: SplashScreen()),

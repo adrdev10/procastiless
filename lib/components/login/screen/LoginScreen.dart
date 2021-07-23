@@ -15,7 +15,6 @@ class LoginScreenState extends State<LoginScreen> {
   late FirebaseAuth auth;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     auth = FirebaseAuth.instance;
   }
@@ -25,39 +24,48 @@ class LoginScreenState extends State<LoginScreen> {
     return BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(WaitingToLogin()),
       child: Scaffold(
-        body: Container(child:
-            BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-          return Row(
-            children: [
-              if (state is WaitingToLogin) ...[
-                FloatingActionButton(
-                  heroTag: "signin",
-                  onPressed: () {
-                    context.read<LoginBloc>().add(new SignInEvent());
-                  },
-                  child: Text("Sigin in"),
-                ),
-                FloatingActionButton(
-                  heroTag: "logout",
-                  onPressed: () {
-                    context.read<LoginBloc>().add(new LogOutEvent());
-                  },
-                  child: Text("Sign out"),
-                ),
-              ],
-              if (state is LoggedIn) ...[
-                Text("Logged in"),
-                FloatingActionButton(
-                  heroTag: "logout",
-                  onPressed: () {
-                    context.read<LoginBloc>().add(new LogOutEvent());
-                  },
-                  child: Text("Sign out"),
-                ),
-              ],
-            ],
-          );
-        })),
+        body: SafeArea(
+          child: Container(child:
+              BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+            return Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  Text('Procastiless'),
+                  RichText(
+                      text: TextSpan(
+                    text: 'A better FUN way to get things done',
+                    style: DefaultTextStyle.of(context).style,
+                    children: const <TextSpan>[],
+                  )),
+                  Image.asset(
+                    'images/Characther.png',
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
+                  if (state is WaitingToLogin) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<LoginBloc>().add(new SignInEvent());
+                      },
+                      child: Text("Sigin in"),
+                    ),
+                  ],
+                  if (state is LoggedIn) ...[
+                    Text("Logged in"),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<LoginBloc>().add(new LogOutEvent());
+                      },
+                      child: Text("Sign out"),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          })),
+        ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:procastiless/components/login/bloc/login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvents, LoginState> {
   LoginBloc(LoginState initialState) : super(initialState);
+
   @override
   Stream<LoginState> mapEventToState(LoginEvents event) async* {
     List<LoginState> states = <LoginState>[];

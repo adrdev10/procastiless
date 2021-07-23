@@ -13,5 +13,7 @@ import 'package:procastiless/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
+    // var gesture = await tester.createGesture();
+    // tester.getSize()
   });
 }
