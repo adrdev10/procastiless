@@ -1,19 +1,28 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:procastiless/constants/colors.dart';
 import 'package:procastiless/widgets/splash-widget.dart';
 
 import 'config/themes/defaultapptheme.dart';
-import 'config/themes/maintheme.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: colorNames['appbar-color'],
+  ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
-      theme: ThemeManager().createDefaultTheme(MainTheme()),
+  runApp(
+    MaterialApp(
+      theme: ProcastilessTheme().mainDefaultTheme,
       title: 'Procastiless',
       home: Scaffold(
-        body: SafeArea(child: SplashScreen()),
-      )));
+        body: SafeArea(
+          child: SplashScreen(),
+        ),
+      ),
+    ),
+  );
 }
 
 class Procastiless extends StatefulWidget {
