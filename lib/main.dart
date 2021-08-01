@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:procastiless/widgets/splash-widget.dart';
 
 import 'config/themes/defaultapptheme.dart';
-import 'config/themes/theme defiintions/maintheme.dart';
+import 'config/themes/maintheme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

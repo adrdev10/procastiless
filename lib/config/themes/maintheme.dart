@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/src/painting/text_style.dart';
 import 'package:procastiless/config/themes/defaultapptheme.dart';
+import 'package:procastiless/constants/colors.dart';
 
 class MainTheme implements ThemeInterface {
   @override
@@ -12,6 +13,7 @@ class MainTheme implements ThemeInterface {
 
   MainTheme() {
     textThemeData = MainThemeText(colorThemeData);
+    colorThemeData = MainThemeColor();
   }
 }
 
@@ -26,19 +28,23 @@ class MainThemeColor implements ThemeColorInterface {
   Color? buttonColor;
 
   @override
-  Color? primaryColor;
+  Color? primaryColor = colorNames['primary-color'];
 
   @override
   Color? secondaryColor;
 
   @override
-  Color? tabBarColor;
+  Color? tabBarColor = colorNames['primary-color'];
 
   @override
   Color? tabBarItemSelectedColor;
 
   @override
   Color? tabVarItemColor;
+
+  MainThemeColor() {
+    appBarColor = colorNames['primary-color'];
+  }
 
   @override
   // TODO: implement getBrightness
@@ -50,7 +56,7 @@ class MainThemeColor implements ThemeColorInterface {
 
   @override
   // TODO: implement getPrimaryColor
-  Color? get getPrimaryColor => throw UnimplementedError();
+  Color? get getPrimaryColor => primaryColor;
 
   @override
   // TODO: implement getSecondaryColor
@@ -58,7 +64,7 @@ class MainThemeColor implements ThemeColorInterface {
 
   @override
   // TODO: implement getTabBarColor
-  Color? get getTabBarColor => throw UnimplementedError();
+  Color? get getTabBarColor => tabBarColor;
 }
 
 class MainThemeText implements ThemeTextInterface {
@@ -89,7 +95,10 @@ class MainThemeText implements ThemeTextInterface {
         color: colorInterface?.buttonColor,
         fontSize: loginButtonFontSize,
         fontFamily: fontFamily);
-    mainHeader = TextStyle();
+    mainHeader = TextStyle(
+      fontFamily: 'Poppings',
+      fontSize: 30,
+    );
   }
 
   @override

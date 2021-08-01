@@ -32,11 +32,17 @@ class LoginScreenState extends State<LoginScreen> {
               height: MediaQuery.of(context).size.height,
               child: Column(
                 children: [
-                  Text('Procastiless'),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .03,
+                  ),
+                  Text(
+                    'Procastiless',
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
                   RichText(
                       text: TextSpan(
                     text: 'A better FUN way to get things done',
-                    style: DefaultTextStyle.of(context).style,
+                    style: Theme.of(context).textTheme.bodyText1,
                     children: const <TextSpan>[],
                   )),
                   Image.asset(

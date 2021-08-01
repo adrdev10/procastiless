@@ -5,6 +5,14 @@ mixin ThemeGenerator {
   static final String themeName = "Default";
   ThemeData createDefaultTheme(ThemeInterface theme) {
     return ThemeData(
+        fontFamily: 'Poppins',
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+        ),
         accentColor: theme.colorThemeData?.getPrimaryColor,
         appBarTheme: AppBarTheme(
             color: theme.colorThemeData?.appBarColor,
