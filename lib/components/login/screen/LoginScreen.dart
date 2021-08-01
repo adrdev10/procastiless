@@ -41,12 +41,22 @@ class LoginScreenState extends State<LoginScreen> {
                         'Procastiless',
                         style: Theme.of(context).textTheme.headline3,
                       ),
-                      RichText(
-                          text: TextSpan(
-                        text: 'A better FUN way to get things done',
-                        style: Theme.of(context).textTheme.bodyText1,
-                        children: const <TextSpan>[],
-                      )),
+                      Align(
+                        alignment: Alignment.center,
+                        child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: '\nA better FUN way to get things done',
+                              style: Theme.of(context).textTheme.bodyText1,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      "\n\nThe change in mindset starts with you",
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                )
+                              ],
+                            )),
+                      ),
                       Stack(
                         children: [
                           Image.asset(
@@ -94,10 +104,21 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       if (state is WaitingToLogin) ...[
                         ElevatedButton(
+                          clipBehavior: Clip.hardEdge,
+                          style: Theme.of(context).elevatedButtonTheme.style,
                           onPressed: () {
                             context.read<LoginBloc>().add(new SignInEvent());
                           },
-                          child: Text("Sigin in"),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            width: MediaQuery.of(context).size.width * .50,
+                            height: MediaQuery.of(context).size.width * .13,
+                            child: Center(
+                              child: Text("Let’s get started!"),
+                            ),
+                          ),
                         ),
                       ],
                       if (state is LoggedIn) ...[

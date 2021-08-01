@@ -4,7 +4,8 @@ final Map<String, Color> colorNames = {
   "primary-color": BetterColor.returnHexCode("76F3B7"),
   // "secondary-color": Color(2344).returnHexCode()
   "title-color": BetterColor.returnHexCode("1E1E1E"),
-  "appbar-color": BetterColor.returnHexCode('1E1E1E'),
+  "appbar-color": BetterColor.returnHexCode('00e387'),
+  "buttontext-color": BetterColor.returnHexCode('76F3B7'),
 };
 
 extension BetterColor on Color {
