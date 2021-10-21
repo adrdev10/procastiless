@@ -1,7 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:procastiless/components/login/screen/LoginScreen.dart';
-import 'package:procastiless/main.dart';
 
 final router = FluroRouter();
 

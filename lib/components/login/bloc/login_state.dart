@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:procastiless/components/login/models/user.dart';
+
 abstract class LoginState {
   const LoginState();
 }
 
 class LoggedIn extends LoginState {
-  const LoggedIn();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  AccountUser? accountUser;
+  LoggedIn(this.accountUser);
 }
 
 class LoggedOut extends LoginState {

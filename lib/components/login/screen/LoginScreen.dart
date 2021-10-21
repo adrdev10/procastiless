@@ -1,10 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:procastiless/components/dashboard/screen/dashboardscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
+import 'package:procastiless/widgets/avatarselection.dart';
+import 'package:procastiless/widgets/toploginscreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,61 +14,107 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  late FirebaseAuth auth;
   @override
   void initState() {
     super.initState();
-    auth = FirebaseAuth.instance;
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LoginBloc>(
-      create: (context) => LoginBloc(WaitingToLogin()),
-      child: Scaffold(
-        body: SafeArea(
-          child: Container(child:
-              BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          child: BlocListener<LoginBloc, LoginState>(
+              listener: (context, state) {
+            if (state is LoggedIn) {
+              if (state.accountUser?.avatarUrl == "") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AvatarSelector();
+                    },
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return Dashboard();
+                    },
+                  ),
+                );
+              }
+            }
+          }, child:
+                  BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
             return Container(
               width: double.infinity,
+              margin: const EdgeInsets.only(top: 40),
               height: MediaQuery.of(context).size.height,
-              child: Column(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .03,
-                  ),
-                  Text(
-                    'Procastiless',
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  RichText(
-                      text: TextSpan(
-                    text: 'A better FUN way to get things done',
-                    style: Theme.of(context).textTheme.bodyText1,
-                    children: const <TextSpan>[],
-                  )),
-                  Image.asset(
-                    'images/Characther.png',
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                  ),
-                  if (state is WaitingToLogin) ...[
-                    ElevatedButton(
+                  LoginScreenTop(),
+                  Positioned(
+                    bottom: 100,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          shadowColor: MaterialStateProperty.all(Colors.black),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          elevation: MaterialStateProperty.all(0),
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(40)),
+                          ))),
                       onPressed: () {
-                        context.read<LoginBloc>().add(new SignInEvent());
+                        //Call auth with google signin
+                        context
+                            .read<LoginBloc>()
+                            .add(new SignUpWithGoogleAuthEvent());
                       },
-                      child: Text("Sigin in"),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width * .6,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(40)),
+                            gradient: LinearGradient(
+                              colors: [Color(0xff7E33B8), Color(0xffEE5A3A)],
+                            )),
+                        child: Text('''LET'\S GET STARTED'''),
+                      ),
                     ),
+                  ),
+                  if (state is InProcessOfLogin) ...[
+                    Center(child: CircularProgressIndicator())
                   ],
-                  if (state is LoggedIn) ...[
-                    Text("Logged in"),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<LoginBloc>().add(new LogOutEvent());
-                      },
-                      child: Text("Sign out"),
+                  Positioned(
+                    bottom: 50,
+                    child: Row(
+                      children: [
+                        Text(
+                          'don\'t want an account',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.apply(color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            context.read<LoginBloc>().add(new SignInEvent());
+                          },
+                          child: Text('Proceed'),
+                        )
+                      ],
                     ),
-                  ],
+                  ),
                 ],
               ),
             );

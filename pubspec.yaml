@@ -27,7 +27,10 @@ dependencies:
   fluro: ^2.0.3
   firebase_core: "^1.4.0"
   firebase_auth: ^3.0.1
-
+  google_fonts: ^2.1.0
+  google_sign_in: ^5.1.1
+  cloud_firestore: ^2.5.3
+  carousel_slider: ^4.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,7 +54,12 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/Characther.png    
-
+    - assets/images/char1.png
+    - assets/images/char2.png
+    - assets/images/char3.png
+    - assets/images/next.png
+    - assets/images/bell.png
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

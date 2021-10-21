@@ -1,106 +1,37 @@
-import 'dart:ui';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import 'package:flutter/src/painting/text_style.dart';
-import 'package:procastiless/config/themes/defaultapptheme.dart';
-import 'package:procastiless/constants/colors.dart';
-
-class MainTheme implements ThemeInterface {
-  @override
-  ThemeColorInterface? colorThemeData;
-
-  @override
-  ThemeTextInterface? textThemeData;
-
-  MainTheme() {
-    textThemeData = MainThemeText(colorThemeData);
-    colorThemeData = MainThemeColor();
-  }
+abstract class MainThemeInterface {
+  final gradiant = LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [Color(0xff7E33B8), Color(0xffEE5A3A)])
+      .createShader(Rect.fromLTWH(0, 0, 0.0, 150.0));
+  ThemeData getTheme();
 }
 
-class MainThemeColor implements ThemeColorInterface {
+class MainTheme extends MainThemeInterface {
   @override
-  Color? appBarColor;
-
-  @override
-  Brightness? brightness;
-
-  @override
-  Color? buttonColor;
-
-  @override
-  Color? primaryColor = colorNames['primary-color'];
-
-  @override
-  Color? secondaryColor;
-
-  @override
-  Color? tabBarColor = colorNames['primary-color'];
-
-  @override
-  Color? tabBarItemSelectedColor;
-
-  @override
-  Color? tabVarItemColor;
-
-  MainThemeColor() {
-    appBarColor = colorNames['primary-color'];
-  }
-
-  @override
-  // TODO: implement getBrightness
-  Brightness? get getBrightness => brightness;
-
-  @override
-  // TODO: implement getButtonColor
-  Color? get getButtonColor => throw UnimplementedError();
-
-  @override
-  // TODO: implement getPrimaryColor
-  Color? get getPrimaryColor => primaryColor;
-
-  @override
-  // TODO: implement getSecondaryColor
-  Color? get getSecondaryColor => throw UnimplementedError();
-
-  @override
-  // TODO: implement getTabBarColor
-  Color? get getTabBarColor => tabBarColor;
-}
-
-class MainThemeText implements ThemeTextInterface {
-  double? loginButtonFontSize = 17.0;
-  String? fontFamily = 'Poppins';
-  @override
-  TextStyle? buttonText;
-
-  @override
-  TextStyle? darkSubheading;
-
-  @override
-  TextStyle? mainHeader;
-
-  @override
-  TextStyle? paragraph;
-
-  @override
-  TextStyle? subheading;
-
-  @override
-  // TODO: implement getMainHeader
-  TextStyle? get getMainHeader => mainHeader;
-
-  MainThemeText(ThemeColorInterface? color) {
-    colorInterface = color;
-    buttonText = TextStyle(
-        color: colorInterface?.buttonColor,
-        fontSize: loginButtonFontSize,
-        fontFamily: fontFamily);
-    mainHeader = TextStyle(
+  ThemeData getTheme() {
+    return ThemeData(
       fontFamily: 'Poppings',
-      fontSize: 30,
+      textTheme: TextTheme(
+        bodyText1: GoogleFonts.poppins(),
+        headline1: GoogleFonts.poppins(foreground: Paint()..shader = gradiant),
+        headline2: GoogleFonts.poppins(foreground: Paint()..shader = gradiant),
+        headline3: GoogleFonts.poppins(foreground: Paint()..shader = gradiant),
+        headline4: GoogleFonts.poppins(foreground: Paint()..shader = gradiant),
+        headline5: TextStyle(
+            foreground: Paint()..shader = gradiant,
+            fontWeight: FontWeight.bold),
+        headline6: TextStyle(foreground: Paint()..shader = gradiant),
+        subtitle1: TextStyle(foreground: Paint()..shader = gradiant),
+        bodyText2: GoogleFonts.poppins(
+            foreground: Paint()..shader = gradiant,
+            fontWeight: FontWeight.bold),
+      ),
     );
   }
-
-  @override
-  ThemeColorInterface? colorInterface;
 }

@@ -6,6 +6,8 @@ class LogOutEvent extends LoginEvents {}
 
 class SignUpEvent extends LoginEvents {}
 
+class SetUpAvatarEvent extends LoginEvents {}
+
 class SignUpWithGoogleAuthEvent extends LoginEvents {}
 
 class DeleteAccountEvent extends LoginEvents {}
