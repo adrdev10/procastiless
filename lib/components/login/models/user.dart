@@ -6,8 +6,8 @@ class AccountUser {
   int? exp;
   AccountUser(this.name, this.email, this.avatarUrl, this.uuid, this.exp);
 
-  factory AccountUser.fromJson(Map<String, dynamic> json) {
-    return AccountUser(json["name"], json["email"], json["avatarUrl"],
-        json["uuid"], json["exp"]);
+  factory AccountUser.fromJson(Map<String, dynamic>? json) {
+    return AccountUser(json?["name"], json?["email"], json?["avatarUrl"],
+        json?["uuid"], json?["exp"]);
   }
 }

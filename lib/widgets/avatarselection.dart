@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/dashboard/screen/dashboardscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
-import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 
 class AvatarSelector extends StatefulWidget {
@@ -14,6 +14,7 @@ class AvatarSelector extends StatefulWidget {
 
 class AvatarSelectorState extends State<AvatarSelector> {
   int? selectedAvatar;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -81,7 +82,7 @@ class AvatarSelectorState extends State<AvatarSelector> {
                   height: 100,
                 ),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     var currentState = context.read<LoginBloc>().state;
                     if (currentState is LoggedIn) {
                       if (selectedAvatar == 0) {
@@ -94,6 +95,15 @@ class AvatarSelectorState extends State<AvatarSelector> {
                         currentState.accountUser?.avatarUrl =
                             'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/g10.png?alt=media&token=4c8d6f7d-4c26-42cb-ae94-e7b035f3a475';
                       }
+                    }
+                    if ((currentState as LoggedIn).auth.currentUser?.uid !=
+                        null) {
+                      await firestore
+                          .collection('users')
+                          .doc(currentState.auth.currentUser!.uid)
+                          .update({
+                        'avatarUrl': currentState.accountUser?.avatarUrl,
+                      });
                     }
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Dashboard()));

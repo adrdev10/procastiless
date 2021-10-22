@@ -88,6 +88,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         return userInCollection;
       } else {
         addUser(authresult, firestore);
+        emit(LoggedIn(userInCollection));
       }
     } catch (e) {
       return null;
@@ -97,7 +98,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
 
   void addUser(UserCredential auth, FirebaseFirestore store) async {
     try {
-      await store.collection('users').add({
+      await store.collection('users').doc(auth.user?.uid).set({
         'avatarUrl': '',
         'email': auth.user?.email,
         'exp': 0,
@@ -111,19 +112,13 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
 
   Future<AccountUser?> isUserInCollection(
       UserCredential auth, FirebaseFirestore store) async {
-    final cRef = await store.collection('users').get();
+    final cRef = await store.collection('users').doc(auth.user?.uid).get();
     try {
-      if (cRef.size > 0) {
-        final users = cRef.docs
-            .map((element) => AccountUser.fromJson(element.data()))
-            .toList();
-        for (var i = 0; i < users.length; i++) {
-          if (users[i].uuid == auth.user?.uid) {
-            accountUser = AccountUser(users[i].name, users[i].email,
-                users[i].avatarUrl, users[i].uuid, users[i].exp);
-            return users[i];
-          }
-        }
+      if (cRef.exists) {
+        final user = AccountUser.fromJson(cRef.data());
+        accountUser = AccountUser(
+            user.name, user.email, user.avatarUrl, user.uuid, user.exp);
+        return user;
       }
     } catch (e) {
       print(e);
