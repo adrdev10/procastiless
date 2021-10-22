@@ -28,7 +28,8 @@ class LoginScreenState extends State<LoginScreen> {
           child: BlocListener<LoginBloc, LoginState>(
               listener: (context, state) {
             if (state is LoggedIn) {
-              if (state.accountUser?.avatarUrl == "") {
+              if (state.accountUser?.avatarUrl == "" ||
+                  state.accountUser?.avatarUrl == null) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
