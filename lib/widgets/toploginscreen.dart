@@ -7,8 +7,10 @@ class LoginScreenTop extends StatelessWidget {
       children: [
         Text(
           'ProcrastiLess',
-          style:
-              Theme.of(context).textTheme.apply(fontSizeFactor: 1.6).headline5,
+          style: Theme.of(context)
+              .textTheme
+              .apply(fontSizeFactor: 2.2, fontSizeDelta: .3)
+              .headline5,
         ),
         SizedBox(
           height: 40,

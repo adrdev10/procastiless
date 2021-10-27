@@ -39,6 +39,7 @@ class ProjectScreenState extends State<ProjectScreen> {
           return SafeArea(
             child: Scaffold(
               body: Container(
+                color: Colors.white,
                 margin: EdgeInsets.only(top: 7),
                 padding: const EdgeInsets.all(2),
                 width: double.infinity,
@@ -83,7 +84,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                       children: [
                         Image.network(
                           '${state.accountUser?.avatarUrl}',
-                          height: 300,
+                          height: 260,
                         ),
                         Positioned(
                           right: -.5,

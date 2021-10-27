@@ -82,10 +82,10 @@ class LoginScreenState extends State<LoginScreen> {
                         width: MediaQuery.of(context).size.width * .6,
                         height: 60,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                            gradient: LinearGradient(
-                              colors: [Color(0xff7E33B8), Color(0xffEE5A3A)],
-                            )),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(40),
+                            ),
+                            color: Color(0xff007AE5)),
                         child: Text('''LET'\S GET STARTED'''),
                       ),
                     ),
