@@ -30,6 +30,7 @@ class DashboardState extends State<Dashboard> {
       floatingActionButton: AddProjectButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         iconSize: 28,
         elevation: 10,
         type: BottomNavigationBarType.fixed,

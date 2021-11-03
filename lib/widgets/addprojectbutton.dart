@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:procastiless/components/project/screen/newproject.dart';
 
 class AddProjectButton extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class AddProjectButton extends StatelessWidget {
         mini: true,
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return Container();
+            return NewProject();
           }));
         },
         child: Container(
