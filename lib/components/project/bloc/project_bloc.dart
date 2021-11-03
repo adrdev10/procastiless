@@ -19,3 +19,5 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
     }
   }
 }
+
+void _fetchProjects() {}
