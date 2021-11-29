@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
+import 'package:procastiless/components/project/bloc/project_bloc.dart';
+import 'package:procastiless/components/project/bloc/project_event.dart';
+import 'package:procastiless/components/project/bloc/project_state.dart';
 
 class ProjectScreen extends StatefulWidget {
   @override
@@ -35,6 +38,7 @@ class ProjectScreenState extends State<ProjectScreen> {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         if (state is LoggedIn) {
+          context.read<ProjectBloc>().add(new FetchProjectEvent());
           return SafeArea(
             child: Scaffold(
               body: Container(
@@ -91,6 +95,27 @@ class ProjectScreenState extends State<ProjectScreen> {
                               '${convertExpToLevel(state.accountUser?.exp)}'),
                         )
                       ],
+                    ),
+                    Flexible(
+                      child: BlocBuilder<ProjectBloc, ProjectBaseState>(
+                          builder: (context, state) {
+                        if (state is ProjectLoadedState) {
+                          if (state.projects.length == 0) {
+                            return Text("No Projects created");
+                          }
+                          return ListView.builder(
+                              itemCount: state.projects.length,
+                              itemBuilder: (context, i) {
+                                return ListTile(
+                                  leading: Text("${state.projects[i]?.name}"),
+                                );
+                              });
+                        } else if (state is ProjectLoadingState) {
+                          return CircularProgressIndicator();
+                        } else {
+                          return Text("No Projects Found");
+                        }
+                      }),
                     ),
                   ],
                 ),

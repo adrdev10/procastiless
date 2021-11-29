@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
+import 'package:procastiless/components/project/bloc/project_bloc.dart';
+import 'package:procastiless/components/project/bloc/project_state.dart';
 import 'package:procastiless/components/project/screen/projectscreen.dart';
 import 'package:procastiless/widgets/addprojectbutton.dart';
 
@@ -75,13 +77,15 @@ class DashboardState extends State<Dashboard> {
       ),
       body: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              if (currentPageSelected == 0) ProjectScreen(),
-              tempWdiget
-            ],
-          );
+          return BlocProvider<ProjectBloc>(
+              create: (context) => ProjectBloc(ProjectLoadingState(), state),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  if (currentPageSelected == 0) ProjectScreen(),
+                  tempWdiget
+                ],
+              ));
         },
       ),
     );

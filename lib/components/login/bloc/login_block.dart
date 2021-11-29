@@ -8,7 +8,7 @@ import 'package:procastiless/components/login/models/user.dart';
 
 class LoginBloc extends Bloc<LoginEvents, LoginState> {
   LoginBloc(LoginState initialState) : super(initialState);
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore store = FirebaseFirestore.instance;
   @override
   Stream<LoginState> mapEventToState(LoginEvents event) async* {
     List<LoginState> states = <LoginState>[];
@@ -82,21 +82,20 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     try {
       var authresult =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      userInCollection = await isUserInCollection(authresult, firestore);
-      if (userInCollection != null) {
-        return userInCollection;
-      } else {
-        userInCollection = addUser(authresult, firestore);
-        return userInCollection;
+      //Check if user exists in DB
+      userInCollection = await isUserInCollection(authresult);
+      if (userInCollection == null) {
+        //Create new user in DB and update the bloc state
+        userInCollection = addUser(authresult);
       }
+      createProjectTemplate(authresult);
+      return userInCollection;
     } catch (e) {
       return null;
     }
-    return userInCollection;
   }
 
-  Future<AccountUser?> addUser(
-      UserCredential auth, FirebaseFirestore store) async {
+  Future<AccountUser?> addUser(UserCredential auth) async {
     try {
       await store.collection('users').doc(auth.user?.uid).set({
         'avatarUrl': '',
@@ -112,8 +111,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     }
   }
 
-  Future<AccountUser?> isUserInCollection(
-      UserCredential auth, FirebaseFirestore store) async {
+  Future<AccountUser?> isUserInCollection(UserCredential auth) async {
     final cRef = await store.collection('users').doc(auth.user?.uid).get();
     try {
       if (cRef.exists) {
@@ -134,6 +132,20 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
       print('Error: ${e.message} \nError type: ${e.runtimeType}');
     } catch (e) {
       print('Error: $e \n Error: ${e.runtimeType}');
+    }
+  }
+
+  void createProjectTemplate(UserCredential auth) async {
+    var oldCollection =
+        await store.collection('project').doc(auth.user?.uid).get();
+    if (!oldCollection.exists) {
+      store.collection('project').doc(auth.user?.uid).set({
+        'deadline': DateTime.now(),
+        'description': "",
+        'name': "",
+        'priority': "",
+        'uuid': auth.user?.uid
+      });
     }
   }
 
