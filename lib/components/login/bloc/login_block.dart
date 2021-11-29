@@ -8,7 +8,6 @@ import 'package:procastiless/components/login/models/user.dart';
 
 class LoginBloc extends Bloc<LoginEvents, LoginState> {
   LoginBloc(LoginState initialState) : super(initialState);
-  AccountUser? accountUser;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Stream<LoginState> mapEventToState(LoginEvents event) async* {
@@ -87,8 +86,8 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
       if (userInCollection != null) {
         return userInCollection;
       } else {
-        addUser(authresult, firestore);
-        emit(LoggedIn(userInCollection));
+        userInCollection = addUser(authresult, firestore);
+        return userInCollection;
       }
     } catch (e) {
       return null;
@@ -96,7 +95,8 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     return userInCollection;
   }
 
-  void addUser(UserCredential auth, FirebaseFirestore store) async {
+  Future<AccountUser?> addUser(
+      UserCredential auth, FirebaseFirestore store) async {
     try {
       await store.collection('users').doc(auth.user?.uid).set({
         'avatarUrl': '',
@@ -105,6 +105,8 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         'name': auth.user?.displayName,
         'uuid': auth.user?.uid
       });
+      return AccountUser(
+          auth.user?.displayName, auth.user?.email, "", auth.user?.uid, 0);
     } catch (e) {
       print(e);
     }
@@ -116,8 +118,6 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     try {
       if (cRef.exists) {
         final user = AccountUser.fromJson(cRef.data());
-        accountUser = AccountUser(
-            user.name, user.email, user.avatarUrl, user.uuid, user.exp);
         return user;
       }
     } catch (e) {
