@@ -144,6 +144,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         'description': "",
         'name': "",
         'priority': "",
+        'progress': 0.0,
         'uuid': auth.user?.uid
       });
     }

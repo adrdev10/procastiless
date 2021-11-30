@@ -28,66 +28,66 @@ class DashboardState extends State<Dashboard> {
       ),
     );
 
-    return Scaffold(
-      floatingActionButton: AddProjectButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        iconSize: 28,
-        elevation: 10,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentPageSelected,
-        showUnselectedLabels: false,
-        showSelectedLabels: false,
-        items: [
-          BottomNavigationBarItem(
-            label: '',
-            activeIcon: getShaderMask(Icons.dashboard),
-            icon: Icon(Icons.dashboard, color: Colors.grey),
-          ),
-          BottomNavigationBarItem(
-              activeIcon: getShaderMask(Icons.calendar_today_sharp),
-              label: '',
-              icon: Icon(
-                Icons.calendar_today_sharp,
-                color: Colors.grey,
-              )),
-          BottomNavigationBarItem(
-              activeIcon: getShaderMask(
-                Icons.account_box_rounded,
-              ),
-              label: '',
-              icon: Icon(
-                Icons.account_box_rounded,
-                color: Colors.grey,
-              )),
-          BottomNavigationBarItem(
-              activeIcon: getShaderMask(Icons.insights),
-              label: '',
-              icon: Icon(
-                Icons.insights,
-                color: Colors.grey,
-              )),
-        ],
-        onTap: (index) {
-          setState(() {
-            currentPageSelected = index;
-          });
-        },
-      ),
-      body: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) {
-          return BlocProvider<ProjectBloc>(
-              create: (context) => ProjectBloc(ProjectLoadingState(), state),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  if (currentPageSelected == 0) ProjectScreen(),
-                  tempWdiget
-                ],
-              ));
-        },
-      ),
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return BlocProvider<ProjectBloc>(
+            create: (context) => ProjectBloc(ProjectLoadingState(), state),
+            child: Scaffold(
+                floatingActionButton: AddProjectButton(),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: Colors.white,
+                  iconSize: 28,
+                  elevation: 10,
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: currentPageSelected,
+                  showUnselectedLabels: false,
+                  showSelectedLabels: false,
+                  items: [
+                    BottomNavigationBarItem(
+                      label: '',
+                      activeIcon: getShaderMask(Icons.dashboard),
+                      icon: Icon(Icons.dashboard, color: Color(0xff65ACEB)),
+                    ),
+                    BottomNavigationBarItem(
+                        activeIcon: getShaderMask(Icons.calendar_today_sharp),
+                        label: '',
+                        icon: Icon(
+                          Icons.calendar_today_sharp,
+                          color: Color(0xff65ACEB),
+                        )),
+                    BottomNavigationBarItem(
+                        activeIcon: getShaderMask(
+                          Icons.account_box_rounded,
+                        ),
+                        label: '',
+                        icon: Icon(
+                          Icons.account_box_rounded,
+                          color: Color(0xff65ACEB),
+                        )),
+                    BottomNavigationBarItem(
+                        activeIcon: getShaderMask(Icons.insights),
+                        label: '',
+                        icon: Icon(
+                          Icons.insights,
+                          color: Color(0xff65ACEB),
+                        )),
+                  ],
+                  onTap: (index) {
+                    setState(() {
+                      currentPageSelected = index;
+                    });
+                  },
+                ),
+                body: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (currentPageSelected == 0) ProjectScreen(),
+                    if (currentPageSelected == 1) Center(child: tempWdiget)
+                  ],
+                )));
+      },
     );
   }
 
@@ -95,15 +95,15 @@ class DashboardState extends State<Dashboard> {
     return ShaderMask(
       shaderCallback: (bounds) {
         return LinearGradient(colors: <Color>[
-          Color(0xff7E33B8),
-          Color(0xffEE5A3A),
+          Color(0xff65ACEB),
+          Color(0xff007AE5),
         ], tileMode: TileMode.clamp)
             .createShader(bounds);
       },
       child: Icon(
         icon,
         size: 35,
-        color: Colors.grey,
+        color: Color(0xff007AE5),
       ),
     );
   }

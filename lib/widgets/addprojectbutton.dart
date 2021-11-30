@@ -16,12 +16,12 @@ class AddProjectButton extends StatelessWidget {
           }));
         },
         child: Container(
-          width: 100,
-          height: 100,
+          width: 130,
+          height: 130,
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
-                  colors: [Color(0xff7E33B8), Color(0xffEE5A3A)])),
+                  colors: [Color(0xff243C51), Color(0xff243C51)])),
           child: Icon(
             Icons.add,
             color: Colors.white,
