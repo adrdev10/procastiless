@@ -33,8 +33,7 @@ class MainTheme extends MainThemeInterface {
         headline6: TextStyle(foreground: Paint()..shader = gradiant),
         subtitle1: TextStyle(foreground: Paint()..shader = gradiant),
         bodyText2: GoogleFonts.poppins(
-            foreground: Paint()..shader = gradiant,
-            fontWeight: FontWeight.bold),
+            color: Color(0xff3378B8), fontWeight: FontWeight.bold),
       ),
     );
   }

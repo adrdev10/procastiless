@@ -81,35 +81,35 @@ class AvatarSelectorState extends State<AvatarSelector> {
                 SizedBox(
                   height: 100,
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    var currentState = context.read<LoginBloc>().state;
-                    if (currentState is LoggedIn) {
-                      if (selectedAvatar == 0) {
-                        currentState.accountUser?.avatarUrl =
-                            'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/Group.png?alt=media&token=f5dd18ed-1a3b-403a-aeb0-4db2d1785e3a';
-                      } else if (selectedAvatar == 1) {
-                        currentState.accountUser?.avatarUrl =
-                            'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/icon-vezt-character-map%204.png?alt=media&token=902126c5-21ba-41cb-b551-9d7a213d3c18';
-                      } else {
-                        currentState.accountUser?.avatarUrl =
-                            'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/g10.png?alt=media&token=4c8d6f7d-4c26-42cb-ae94-e7b035f3a475';
+                BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+                  return GestureDetector(
+                    onTap: () async {
+                      if (state is LoggedIn) {
+                        if (selectedAvatar == 0) {
+                          state.accountUser?.avatarUrl =
+                              'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/Group.png?alt=media&token=f5dd18ed-1a3b-403a-aeb0-4db2d1785e3a';
+                        } else if (selectedAvatar == 1) {
+                          state.accountUser?.avatarUrl =
+                              'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/icon-vezt-character-map%204.png?alt=media&token=902126c5-21ba-41cb-b551-9d7a213d3c18';
+                        } else {
+                          state.accountUser?.avatarUrl =
+                              'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/g10.png?alt=media&token=4c8d6f7d-4c26-42cb-ae94-e7b035f3a475';
+                        }
                       }
-                    }
-                    if ((currentState as LoggedIn).auth.currentUser?.uid !=
-                        null) {
-                      await firestore
-                          .collection('users')
-                          .doc(currentState.auth.currentUser!.uid)
-                          .update({
-                        'avatarUrl': currentState.accountUser?.avatarUrl,
-                      });
-                    }
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Dashboard()));
-                  },
-                  child: Image.asset('assets/images/next.png'),
-                ),
+                      if ((state as LoggedIn).auth.currentUser?.uid != null) {
+                        await firestore
+                            .collection('users')
+                            .doc(state.auth.currentUser!.uid)
+                            .update({
+                          'avatarUrl': state.accountUser?.avatarUrl,
+                        });
+                      }
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Dashboard()));
+                    },
+                    child: Image.asset('assets/images/next.png'),
+                  );
+                }),
               ],
             ),
           ),
