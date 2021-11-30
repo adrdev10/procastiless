@@ -22,7 +22,9 @@ class MainTheme extends MainThemeInterface {
         headline1: GoogleFonts.poppins(color: Color(0xff525252)),
         headline2: GoogleFonts.poppins(color: Color(0xff525252)),
         headline3: GoogleFonts.poppins(
-            color: Color(0xff525252), fontWeight: FontWeight.bold),
+            color: Color(0xff525252),
+            fontWeight: FontWeight.bold,
+            fontSize: 30),
         headline4: GoogleFonts.poppins(foreground: Paint()..shader = gradiant),
         headline5: TextStyle(
             color: Color(0xff3378B8),
