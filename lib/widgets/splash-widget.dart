@@ -53,9 +53,6 @@ class SplashScreenState extends State<SplashScreen> {
                 ),
                 boxHeight: MediaQuery.of(context).size.height * .5,
                 text: 'Procrastiless',
-                // child: AnimatedTextKit(animatedTexts: [
-                //   WavyAnimatedText('Procrastiless'),
-                // ]),
               ),
             )),
       ),
