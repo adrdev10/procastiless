@@ -49,21 +49,14 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
     List<Project> projects = [];
     final dbprojects = await firestore
         .collection('project')
-        .doc((loginBloc as LoggedIn).accountUser?.uuid)
+        .where('uuid', isEqualTo: (loginBloc as LoggedIn).accountUser?.uuid)
         .get();
-    if (dbprojects.exists) {
-      if (dbprojects.data()!.length > 0) {
-        var dbProjects = dbprojects.data();
-        if (dbProjects!.length == 5) {
-          projects.add(new Project.fromJson(dbProjects));
-        } else {
-          dbProjects!.forEach((key, value) {
-            projects.add(new Project.fromJson(value));
-          });
-        }
-        return projects;
-      }
+    if (dbprojects.size >= 1) {
+      dbprojects.docs.forEach((element) {
+        projects.add(new Project.fromJson(element.data()));
+      });
+      return projects;
     }
-    return projects;
+    return [];
   }
 }

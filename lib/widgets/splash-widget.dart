@@ -1,5 +1,7 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:procastiless/components/login/screen/LoginScreen.dart';
 
 final router = FluroRouter();
@@ -30,7 +32,8 @@ class SplashScreenState extends State<SplashScreen> {
     super.initState();
     defineRoutes(router);
     ticker().then((value) => router.navigateTo(context, "/login",
-        transition: TransitionType.inFromLeft));
+        transition: TransitionType.fadeIn,
+        transitionDuration: Duration(milliseconds: 1000)));
   }
 
   @override
@@ -38,7 +41,23 @@ class SplashScreenState extends State<SplashScreen> {
     // TODO: implement build
     return Container(
       child: Center(
-        child: Text("Procastiless"),
+        child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: TextLiquidFill(
+                waveColor: Color(0xff3378B8),
+                boxBackgroundColor: Colors.white,
+                textStyle: TextStyle(
+                  fontSize: 50.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                boxHeight: MediaQuery.of(context).size.height * .5,
+                text: 'Procrastiless',
+                // child: AnimatedTextKit(animatedTexts: [
+                //   WavyAnimatedText('Procrastiless'),
+                // ]),
+              ),
+            )),
       ),
     );
   }
