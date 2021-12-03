@@ -13,7 +13,8 @@ class BottomSheetContainer extends StatefulWidget {
 class _BottomSheetContainerState extends State<BottomSheetContainer> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    // INFO: Provider using LoginBloc -> WaitingToLogin()
+    // INFO: Initial part of the app. Do you
     return BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(WaitingToLogin()),
       child: BlocBuilder<LoginBloc, LoginState>(
