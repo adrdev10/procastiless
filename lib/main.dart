@@ -4,16 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/login/screen/LoginScreen.dart';
+import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/widgets/splash-widget.dart';
 
+import 'components/project/bloc/project_state.dart';
 import 'config/themes/maintheme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  var loginProvider = LoginBloc(WaitingToLogin());
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider<LoginBloc>(create: (context) => LoginBloc(WaitingToLogin())),
+      BlocProvider<LoginBloc>(create: (context) => loginProvider),
+      BlocProvider<ProjectBloc>(
+        create: (context) =>
+            ProjectBloc(ProjectLoadingState(), loginProvider.state),
+      )
     ],
     child: MaterialApp(
         routes: {'/login': (context) => LoginScreen()},
