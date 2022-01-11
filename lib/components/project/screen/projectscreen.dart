@@ -109,6 +109,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                         }
                         return Expanded(
                           child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
                               cacheExtent: 1000,
                               addSemanticIndexes: true,
                               primary: true,

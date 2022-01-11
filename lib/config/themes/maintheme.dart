@@ -18,7 +18,8 @@ class MainTheme extends MainThemeInterface {
     return ThemeData(
       fontFamily: 'Poppings',
       textTheme: TextTheme(
-        bodyText1: GoogleFonts.poppins(),
+        bodyText1: GoogleFonts.poppins(
+            color: Color(0xff3378B8), fontWeight: FontWeight.bold),
         headline1: GoogleFonts.poppins(color: Color(0xff525252)),
         headline2: GoogleFonts.poppins(color: Color(0xff525252)),
         headline3: GoogleFonts.poppins(
@@ -31,7 +32,8 @@ class MainTheme extends MainThemeInterface {
             fontWeight: FontWeight.bold,
             letterSpacing: .02),
         headline6: TextStyle(foreground: Paint()..shader = gradiant),
-        subtitle1: TextStyle(foreground: Paint()..shader = gradiant),
+        subtitle1: GoogleFonts.poppins(
+            color: Color(0xff3378B8), fontWeight: FontWeight.bold),
         bodyText2: GoogleFonts.poppins(
             color: Color(0xff3378B8), fontWeight: FontWeight.bold),
       ),
