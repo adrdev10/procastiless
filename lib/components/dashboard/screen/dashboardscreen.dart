@@ -6,6 +6,7 @@ import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
+import 'package:procastiless/components/project/screen/newproject.dart';
 import 'package:procastiless/components/project/screen/projectscreen.dart';
 import 'package:procastiless/widgets/addprojectbutton.dart';
 
@@ -30,63 +31,61 @@ class DashboardState extends State<Dashboard> {
 
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        return BlocProvider<ProjectBloc>(
-            create: (context) => ProjectBloc(ProjectLoadingState(), state),
-            child: Scaffold(
-                floatingActionButton: AddProjectButton(),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
-                bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: Colors.white,
-                  iconSize: 28,
-                  elevation: 10,
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: currentPageSelected,
-                  showUnselectedLabels: false,
-                  showSelectedLabels: false,
-                  items: [
-                    BottomNavigationBarItem(
-                      label: '',
-                      activeIcon: getShaderMask(Icons.dashboard),
-                      icon: Icon(Icons.dashboard, color: Color(0xff65ACEB)),
-                    ),
-                    BottomNavigationBarItem(
-                        activeIcon: getShaderMask(Icons.calendar_today_sharp),
-                        label: '',
-                        icon: Icon(
-                          Icons.calendar_today_sharp,
-                          color: Color(0xff65ACEB),
-                        )),
-                    BottomNavigationBarItem(
-                        activeIcon: getShaderMask(
-                          Icons.account_box_rounded,
-                        ),
-                        label: '',
-                        icon: Icon(
-                          Icons.account_box_rounded,
-                          color: Color(0xff65ACEB),
-                        )),
-                    BottomNavigationBarItem(
-                        activeIcon: getShaderMask(Icons.insights),
-                        label: '',
-                        icon: Icon(
-                          Icons.insights,
-                          color: Color(0xff65ACEB),
-                        )),
-                  ],
-                  onTap: (index) {
-                    setState(() {
-                      currentPageSelected = index;
-                    });
-                  },
+        return Scaffold(
+            floatingActionButton: AddProjectButton(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Colors.white,
+              iconSize: 24,
+              elevation: 10,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: currentPageSelected,
+              showUnselectedLabels: false,
+              showSelectedLabels: false,
+              items: [
+                BottomNavigationBarItem(
+                  label: '',
+                  activeIcon: getShaderMask(Icons.dashboard),
+                  icon: Icon(Icons.dashboard, color: Color(0xff65ACEB)),
                 ),
-                body: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (currentPageSelected == 0) ProjectScreen(),
-                    if (currentPageSelected == 1) Center(child: tempWdiget)
-                  ],
-                )));
+                BottomNavigationBarItem(
+                    activeIcon: getShaderMask(Icons.calendar_today_sharp),
+                    label: '',
+                    icon: Icon(
+                      Icons.calendar_today_sharp,
+                      color: Color(0xff65ACEB),
+                    )),
+                BottomNavigationBarItem(
+                    activeIcon: getShaderMask(
+                      Icons.account_box_rounded,
+                    ),
+                    label: '',
+                    icon: Icon(
+                      Icons.account_box_rounded,
+                      color: Color(0xff65ACEB),
+                    )),
+                BottomNavigationBarItem(
+                    activeIcon: getShaderMask(Icons.insights),
+                    label: '',
+                    icon: Icon(
+                      Icons.insights,
+                      color: Color(0xff65ACEB),
+                    )),
+              ],
+              onTap: (index) {
+                setState(() {
+                  currentPageSelected = index;
+                });
+              },
+            ),
+            body: Stack(
+              alignment: Alignment.center,
+              children: [
+                if (currentPageSelected == 0) ProjectScreen(),
+                if (currentPageSelected == 1) Center(child: tempWdiget)
+              ],
+            ));
       },
     );
   }
@@ -102,7 +101,7 @@ class DashboardState extends State<Dashboard> {
       },
       child: Icon(
         icon,
-        size: 35,
+        size: 30,
         color: Color(0xff007AE5),
       ),
     );
