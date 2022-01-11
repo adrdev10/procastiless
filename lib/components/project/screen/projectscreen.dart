@@ -140,7 +140,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                             height: 10,
                                           ),
                                           Text(
-                                            "${state.projects[i]?.description}",
+                                            "${state.projects[i]!.description!.length >= 25 ? state.projects[i]!.description!.substring(0, 30) + '...' : state.projects[i]?.description}",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12),

@@ -271,95 +271,101 @@ class NewProjectState extends State<NewProject>
       ),
     );
     return AnimatedBuilder(
-      animation: _colorTween,
-      builder: (context, child) {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            backgroundColor: _colorTween.value,
-            elevation: 0,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back,
-                size: 28,
-                color: Colors.blue,
-              ),
-            ),
-          ),
-          body: PageView(
-            physics: physicsPage,
-            controller: pageController,
-            scrollDirection: Axis.vertical,
-            children: [
-              firstPage,
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Color(0xff243C51),
+        animation: _colorTween,
+        builder: (context, child) {
+          return BlocBuilder<ProjectBloc, ProjectBaseState>(
+            builder: (context, state) {
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: AppBar(
+                  backgroundColor: _colorTween.value,
+                  elevation: 0,
+                  leading: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 28,
+                      color: Colors.blue,
+                    ),
+                  ),
                 ),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * .50,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                body: PageView(
+                  physics: physicsPage,
+                  controller: pageController,
+                  scrollDirection: Axis.vertical,
                   children: [
-                    Text(
-                      'Project description',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          ?.apply(color: Colors.grey, fontSizeDelta: 3),
-                    ),
+                    firstPage,
                     Container(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: TextField(
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        style: TextStyle(color: Colors.white),
-                        controller: textEditingControllerDesc,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Color(0xff243C51),
                       ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .6,
-                    ),
-                    BlocBuilder<ProjectBloc, ProjectBaseState>(
-                      builder: (context, state) {
-                        return Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              var priority = "";
-                              if (_selections[0]) priority = 'HIGH';
-                              if (_selections[1]) priority = 'MEDIUM';
-                              if (_selections[2]) priority = 'LOW';
-                              Project project = Project(
-                                  Timestamp.fromDate(
-                                    datePickedInTime!,
-                                  ),
-                                  textEditingControllerDesc?.text,
-                                  textEditingControllerName?.text,
-                                  priority,
-                                  "",
-                                  0);
-                              context
-                                  .read<ProjectBloc>()
-                                  .add(new CreateProjectEvent(project));
-                              Navigator.pop(context);
-                            },
-                            child: Text("Create project"),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * .50,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Project description',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                ?.apply(color: Colors.grey, fontSizeDelta: 3),
                           ),
-                        );
-                      },
-                    ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: TextField(
+                              maxLines: null,
+                              keyboardType: TextInputType.multiline,
+                              style: TextStyle(color: Colors.white),
+                              controller: textEditingControllerDesc,
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .6,
+                          ),
+                          BlocBuilder<ProjectBloc, ProjectBaseState>(
+                            builder: (context, state) {
+                              return Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    var priority = "";
+                                    if (_selections[0]) priority = 'HIGH';
+                                    if (_selections[1]) priority = 'MEDIUM';
+                                    if (_selections[2]) priority = 'LOW';
+                                    Project project = Project(
+                                        Timestamp.fromDate(
+                                          datePickedInTime!,
+                                        ),
+                                        textEditingControllerDesc?.text,
+                                        textEditingControllerName?.text,
+                                        priority,
+                                        "",
+                                        0);
+                                    context
+                                        .read<ProjectBloc>()
+                                        .add(new CreateProjectEvent(project));
+                                    context
+                                        .read<ProjectBloc>()
+                                        .add(new FetchProjectEvent());
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Create project"),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
-        );
-      },
-    );
+              );
+            },
+          );
+        });
   }
 }

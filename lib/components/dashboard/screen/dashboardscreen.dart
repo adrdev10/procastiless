@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:procastiless/components/calendar/calendarscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
@@ -37,39 +38,39 @@ class DashboardState extends State<Dashboard> {
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: BottomNavigationBar(
               backgroundColor: Colors.white,
-              iconSize: 24,
-              elevation: 10,
+              iconSize: 22,
+              elevation: 100,
               type: BottomNavigationBarType.fixed,
               currentIndex: currentPageSelected,
-              showUnselectedLabels: false,
-              showSelectedLabels: false,
+              selectedLabelStyle:
+                  TextStyle(color: Color(0xff65ACEB), fontSize: 10),
+              unselectedItemColor: Color(0xff65ACEB),
+              unselectedFontSize: 10,
               items: [
                 BottomNavigationBarItem(
-                  label: '',
-                  activeIcon: getShaderMask(Icons.dashboard),
-                  icon: Icon(Icons.dashboard, color: Color(0xff65ACEB)),
+                  label: 'Overview',
+                  activeIcon: getShaderMask(Icons.house_rounded),
+                  icon: Icon(Icons.house_rounded, color: Color(0xff65ACEB)),
                 ),
                 BottomNavigationBarItem(
-                    activeIcon: getShaderMask(Icons.calendar_today_sharp),
-                    label: '',
+                    activeIcon: getShaderMask(Icons.calendar_today_rounded),
+                    label: 'Calendar',
                     icon: Icon(
-                      Icons.calendar_today_sharp,
+                      Icons.calendar_today_rounded,
                       color: Color(0xff65ACEB),
                     )),
                 BottomNavigationBarItem(
-                    activeIcon: getShaderMask(
-                      Icons.account_box_rounded,
-                    ),
-                    label: '',
+                    activeIcon: getShaderMask(Icons.analytics),
+                    label: 'Analytics',
                     icon: Icon(
-                      Icons.account_box_rounded,
+                      Icons.analytics,
                       color: Color(0xff65ACEB),
                     )),
                 BottomNavigationBarItem(
-                    activeIcon: getShaderMask(Icons.insights),
-                    label: '',
+                    activeIcon: getShaderMask(Icons.person),
+                    label: 'Account',
                     icon: Icon(
-                      Icons.insights,
+                      Icons.person,
                       color: Color(0xff65ACEB),
                     )),
               ],
@@ -83,7 +84,8 @@ class DashboardState extends State<Dashboard> {
               alignment: Alignment.center,
               children: [
                 if (currentPageSelected == 0) ProjectScreen(),
-                if (currentPageSelected == 1) Center(child: tempWdiget)
+                if (currentPageSelected == 1) CalendarScreen(),
+                if (currentPageSelected == 3) Center(child: tempWdiget),
               ],
             ));
       },
