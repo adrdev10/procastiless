@@ -19,14 +19,13 @@ class NewProjectState extends State<NewProject>
   TextEditingController? textEditingControllerName;
   TextEditingController? textEditingControllerTime;
   TextEditingController? textEditingControllerDesc;
+  PageController? pageController;
   String? inputTime;
   String? name;
   String? projectDesc;
   String? datePicked;
   DateTime? datePickedInTime;
   Color? appBarColor = Colors.white;
-  final PageController pageController =
-      PageController(initialPage: 0, keepPage: true);
   List<bool> _selections = List.generate(3, (index) => false);
   List<Color> colors = [
     Color(0xffE4C864),
@@ -40,14 +39,15 @@ class NewProjectState extends State<NewProject>
     textEditingControllerName = TextEditingController();
     textEditingControllerTime = TextEditingController();
     textEditingControllerDesc = TextEditingController();
+    pageController = PageController(initialPage: 0, keepPage: true);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 400));
     _colorTween = ColorTween(begin: Colors.white, end: Color(0xff243C51))
         .animate(_animationController);
-    pageController.addListener(() {
+    pageController?.addListener(() {
       setState(() {
-        print(pageController.offset);
-        if (pageController.offset > MediaQuery.of(context).size.height * .5) {
+        print(pageController?.offset);
+        if (pageController!.offset > MediaQuery.of(context).size.height * .5) {
           _animationController.forward();
         } else {
           _animationController.reverse();
@@ -110,7 +110,7 @@ class NewProjectState extends State<NewProject>
                               (datePicked != null || datePicked != "") &&
                               (textEditingControllerName != null ||
                                   textEditingControllerName!.text != "")) {
-                            pageController.animateToPage(1,
+                            pageController?.animateToPage(1,
                                 duration: Duration(milliseconds: 600),
                                 curve: Curves.easeInOut);
                           } else {
@@ -158,7 +158,7 @@ class NewProjectState extends State<NewProject>
                                   (datePicked != null || datePicked != "") &&
                                   _selections
                                       .any((element) => element == true)) {
-                                pageController.animateToPage(1,
+                                pageController?.animateToPage(1,
                                     duration: Duration(milliseconds: 600),
                                     curve: Curves.easeInOut);
                               } else {
@@ -212,7 +212,7 @@ class NewProjectState extends State<NewProject>
                               (textEditingControllerTime?.text != null ||
                                   textEditingControllerTime?.text != "")) {
                             physicsPage = BouncingScrollPhysics();
-                            pageController.animateToPage(1,
+                            pageController?.animateToPage(1,
                                 duration: Duration(milliseconds: 600),
                                 curve: Curves.easeInOutExpo);
                           } else {
