@@ -14,4 +14,15 @@ class Project {
     return Project(json?["deadline"], json?["description"], json?["name"],
         json?["priority"], json?["uuid"], json?['progress']);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': this.name,
+      'description': this.description,
+      'deadline': this.deadline,
+      'priority': this.priority,
+      'progress': this.progress,
+      'uuid': this.uuid
+    };
+  }
 }

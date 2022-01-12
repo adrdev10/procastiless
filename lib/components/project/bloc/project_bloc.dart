@@ -22,6 +22,9 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
       case FetchProjectEvent:
         _fetchProjects(states);
         break;
+      case CreateProjectEvent:
+        _createProject(states, (event as CreateProjectEvent).project);
+        break;
       case ReloadProjectEvent:
         break;
     }
@@ -58,5 +61,20 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
       return projects;
     }
     return [];
+  }
+
+  void _createProject(List<ProjectBaseState> states, Project? project) async {
+    try {
+      createProject(project);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> createProject(Project? project) async {
+    project?.uuid = (loginBloc as LoggedIn).accountUser?.uuid;
+    var projectAdded =
+        await firestore.collection('project').add(project!.toJson());
+    return projectAdded != null;
   }
 }

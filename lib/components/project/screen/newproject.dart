@@ -1,12 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:procastiless/components/project/bloc/project_bloc.dart';
+import 'package:procastiless/components/project/bloc/project_event.dart';
+import 'package:procastiless/components/project/bloc/project_state.dart';
+import 'package:procastiless/components/project/data/project.dart';
 
 class NewProject extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => NewProjectState();
 }
 
-class NewProjectState extends State<NewProject> {
+class NewProjectState extends State<NewProject>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation _colorTween;
   TextEditingController? textEditingControllerName;
   TextEditingController? textEditingControllerTime;
   TextEditingController? textEditingControllerDesc;
@@ -14,6 +23,8 @@ class NewProjectState extends State<NewProject> {
   String? name;
   String? projectDesc;
   String? datePicked;
+  DateTime? datePickedInTime;
+  Color? appBarColor = Colors.white;
   final PageController pageController =
       PageController(initialPage: 0, keepPage: true);
   List<bool> _selections = List.generate(3, (index) => false);
@@ -29,6 +40,20 @@ class NewProjectState extends State<NewProject> {
     textEditingControllerName = TextEditingController();
     textEditingControllerTime = TextEditingController();
     textEditingControllerDesc = TextEditingController();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    _colorTween = ColorTween(begin: Colors.white, end: Color(0xff243C51))
+        .animate(_animationController);
+    pageController.addListener(() {
+      setState(() {
+        print(pageController.offset);
+        if (pageController.offset > MediaQuery.of(context).size.height * .5) {
+          _animationController.forward();
+        } else {
+          _animationController.reverse();
+        }
+      });
+    });
   }
 
   @override
@@ -124,6 +149,7 @@ class NewProjectState extends State<NewProject> {
                                       child: widget!);
                                 });
                             setState(() {
+                              datePickedInTime = dateSelected;
                               datePicked = dateSelected != null
                                   ? DateFormat.yMMMMEEEEd().format(dateSelected)
                                   : "";
@@ -244,53 +270,96 @@ class NewProjectState extends State<NewProject> {
         ],
       ),
     );
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            size: 28,
-            color: Colors.blue,
+    return AnimatedBuilder(
+      animation: _colorTween,
+      builder: (context, child) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            backgroundColor: _colorTween.value,
+            elevation: 0,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                Icons.arrow_back,
+                size: 28,
+                color: Colors.blue,
+              ),
+            ),
           ),
-        ),
-      ),
-      body: PageView(
-        physics: physicsPage,
-        controller: pageController,
-        scrollDirection: Axis.vertical,
-        children: [
-          firstPage,
-          Container(
-            decoration: BoxDecoration(
-              color: Color(0xff243C51),
-            ),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * .50,
-            child: Column(
-              children: [
-                Text(
-                  'Project description',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      ?.apply(color: Colors.grey),
+          body: PageView(
+            physics: physicsPage,
+            controller: pageController,
+            scrollDirection: Axis.vertical,
+            children: [
+              firstPage,
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Color(0xff243C51),
                 ),
-                Container(
-                  child: TextField(
-                    style: TextStyle(color: Colors.blue),
-                    controller: textEditingControllerDesc,
-                  ),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * .50,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Project description',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          ?.apply(color: Colors.grey, fontSizeDelta: 3),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: TextField(
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        style: TextStyle(color: Colors.white),
+                        controller: textEditingControllerDesc,
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .6,
+                    ),
+                    BlocBuilder<ProjectBloc, ProjectBaseState>(
+                      builder: (context, state) {
+                        return Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              var priority = "";
+                              if (_selections[0]) priority = 'HIGH';
+                              if (_selections[1]) priority = 'MEDIUM';
+                              if (_selections[2]) priority = 'LOW';
+                              Project project = Project(
+                                  Timestamp.fromDate(
+                                    datePickedInTime!,
+                                  ),
+                                  textEditingControllerDesc?.text,
+                                  textEditingControllerName?.text,
+                                  priority,
+                                  "",
+                                  0);
+                              context
+                                  .read<ProjectBloc>()
+                                  .add(new CreateProjectEvent(project));
+                              Navigator.pop(context);
+                            },
+                            child: Text("Create project"),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
