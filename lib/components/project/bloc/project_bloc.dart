@@ -25,6 +25,9 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
       case CreateProjectEvent:
         _createProject(states, (event as CreateProjectEvent).project);
         break;
+      case DeleteProjectEvent:
+        _deleteProject(states, (event as CreateProjectEvent).project);
+        break;
       case ReloadProjectEvent:
         break;
     }
@@ -76,5 +79,26 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
     var projectAdded =
         await firestore.collection('project').add(project!.toJson());
     return projectAdded != null;
+  }
+
+  void _deleteProject(List<ProjectBaseState> states, Project? project) async {
+    try {
+      deleteProject(project);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> deleteProject(Project? project) async {
+    project?.uuid = (loginBloc as LoggedIn).accountUser?.uuid;
+    var projectForDeletion = firestore
+        .collection('project')
+        .where('uuid', isEqualTo: (loginBloc as LoggedIn).accountUser?.uuid)
+        .where('name', isEqualTo: project?.name);
+    var arraySnap = await projectForDeletion.get();
+    for (var project in arraySnap.docs) {
+      await project.reference.delete();
+    }
+    return true;
   }
 }
