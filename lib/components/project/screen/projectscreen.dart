@@ -9,6 +9,8 @@ import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
+import 'package:procastiless/components/project/data/project.dart';
+import 'package:procastiless/components/project/screen/singleProjectScreen.dart';
 
 class ProjectScreen extends StatefulWidget {
   @override
@@ -115,61 +117,88 @@ class ProjectScreenState extends State<ProjectScreen> {
                               primary: true,
                               itemCount: state.projects.length,
                               itemBuilder: (context, i) {
-                                return Container(
-                                  padding: const EdgeInsets.all(20),
-                                  margin: const EdgeInsets.all(10),
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: Color(0xff243C51),
-                                  ),
-                                  width: MediaQuery.of(context).size.width * .9,
-                                  child: Row(children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return SingleProjectScreen();
+                                    }));
+                                  },
+                                  onLongPress: () {
+                                    Project project = Project(
+                                        state.projects[i]!.deadline,
+                                        state.projects[i]!.description,
+                                        state.projects[i]!.name,
+                                        state.projects[i]!.priority,
+                                        state.projects[i]!.uuid,
+                                        state.projects[i]!.progress);
+                                    context
+                                        .read<ProjectBloc>()
+                                        .add(new DeleteProjectEvent(project));
+                                    Future.delayed(Duration(milliseconds: 500),
+                                        () {
+                                      context
+                                          .read<ProjectBloc>()
+                                          .add(new FetchProjectEvent());
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(20),
+                                    margin: const EdgeInsets.all(10),
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Color(0xff243C51),
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width * .9,
+                                    child: Row(children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            Text(
+                                              "${state.projects[i]?.name}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "${state.projects[i]!.description!.length >= 30 ? state.projects[i]!.description!.substring(0, 30) + '...' : state.projects[i]?.description}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Text(
+                                              "${DateFormat.yMMMMEEEEd().format(state.projects[i]!.deadline!.toDate())}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "${state.projects[i]?.name}",
+                                            "${(state.projects[i]!.progress)! * 100}%",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 18),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            "${state.projects[i]!.description!.length >= 25 ? state.projects[i]!.description!.substring(0, 30) + '...' : state.projects[i]?.description}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(
-                                            "${DateFormat.yMMMMEEEEd().format(state.projects[i]!.deadline!.toDate())}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12),
-                                          ),
+                                                fontSize: 17),
+                                          )
                                         ],
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${(state.projects[i]!.progress)! * 100}%",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 17),
-                                        )
-                                      ],
-                                    )
-                                  ]),
+                                      )
+                                    ]),
+                                  ),
                                 );
                               }),
                         );

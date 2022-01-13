@@ -11,6 +11,9 @@ class CreateProjectEvent extends ProjectEvents {
   CreateProjectEvent(this.project);
 }
 
-class DeleteProjectEvent extends ProjectEvents {}
+class DeleteProjectEvent extends ProjectEvents {
+  Project? project;
+  DeleteProjectEvent(this.project);
+}
 
 class UpdateProjetEvent extends ProjectEvents {}

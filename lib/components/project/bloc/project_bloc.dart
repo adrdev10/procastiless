@@ -26,9 +26,11 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
         _createProject(states, (event as CreateProjectEvent).project);
         break;
       case DeleteProjectEvent:
-        _deleteProject(states, (event as CreateProjectEvent).project);
+        _deleteProject(states, (event as DeleteProjectEvent).project);
         break;
       case ReloadProjectEvent:
+        break;
+      default:
         break;
     }
 

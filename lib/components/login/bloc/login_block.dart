@@ -88,7 +88,6 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         //Create new user in DB and update the bloc state
         userInCollection = addUser(authresult);
       }
-      createProjectTemplate(authresult);
       return userInCollection;
     } catch (e) {
       return null;
@@ -132,21 +131,6 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
       print('Error: ${e.message} \nError type: ${e.runtimeType}');
     } catch (e) {
       print('Error: $e \n Error: ${e.runtimeType}');
-    }
-  }
-
-  void createProjectTemplate(UserCredential auth) async {
-    var oldCollection =
-        await store.collection('project').doc(auth.user?.uid).get();
-    if (!oldCollection.exists) {
-      store.collection('project').doc(auth.user?.uid).set({
-        'deadline': DateTime.now(),
-        'description': "",
-        'name': "",
-        'priority': "",
-        'progress': 0.0,
-        'uuid': auth.user?.uid
-      });
     }
   }
 
