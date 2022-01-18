@@ -45,7 +45,7 @@ class ProjectScreenState extends State<ProjectScreen> {
           return SafeArea(
             child: Scaffold(
               body: Container(
-                color: Colors.white,
+                color: Colors.white12,
                 margin: EdgeInsets.only(top: 7),
                 padding: const EdgeInsets.all(2),
                 width: double.infinity,
@@ -62,7 +62,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Welcome Back',
+                                'Hello 👋',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1
@@ -91,7 +91,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                       children: [
                         Image.network(
                           '${state.accountUser?.avatarUrl}',
-                          height: 260,
+                          height: 210,
                         ),
                         Positioned(
                           right: -.5,
@@ -117,21 +117,21 @@ class ProjectScreenState extends State<ProjectScreen> {
                               primary: true,
                               itemCount: state.projects.length,
                               itemBuilder: (context, i) {
+                                Project project = Project(
+                                    state.projects[i]!.deadline,
+                                    state.projects[i]!.description,
+                                    state.projects[i]!.name,
+                                    state.projects[i]!.priority,
+                                    state.projects[i]!.uuid,
+                                    state.projects[i]!.progress);
                                 return InkWell(
                                   onTap: () {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
-                                      return SingleProjectScreen();
+                                      return SingleProjectScreen(project);
                                     }));
                                   },
                                   onLongPress: () {
-                                    Project project = Project(
-                                        state.projects[i]!.deadline,
-                                        state.projects[i]!.description,
-                                        state.projects[i]!.name,
-                                        state.projects[i]!.priority,
-                                        state.projects[i]!.uuid,
-                                        state.projects[i]!.progress);
                                     context
                                         .read<ProjectBloc>()
                                         .add(new DeleteProjectEvent(project));
