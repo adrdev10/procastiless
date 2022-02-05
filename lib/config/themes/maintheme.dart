@@ -19,9 +19,9 @@ class MainTheme extends MainThemeInterface {
       fontFamily: 'Poppings',
       textTheme: TextTheme(
         bodyText1: GoogleFonts.poppins(
-            color: Color(0xff3378B8), fontWeight: FontWeight.bold),
+            color: Color(0xff2d4a63), fontWeight: FontWeight.bold),
         headline1: GoogleFonts.poppins(color: Color(0xff525252)),
-        headline2: GoogleFonts.poppins(color: Color(0xff525252)),
+        headline2: GoogleFonts.poppins(color: Color(0xff2d4a63)),
         headline3: GoogleFonts.poppins(
             color: Color(0xff525252),
             fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ class MainTheme extends MainThemeInterface {
         subtitle1: GoogleFonts.poppins(
             color: Color(0xff3378B8), fontWeight: FontWeight.bold),
         bodyText2: GoogleFonts.poppins(
-            color: Color(0xff3378B8), fontWeight: FontWeight.bold),
+            color: Color(0xff2d4a63), fontWeight: FontWeight.bold),
       ),
     );
   }
