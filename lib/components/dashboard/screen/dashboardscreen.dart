@@ -33,49 +33,66 @@ class DashboardState extends State<Dashboard> {
             floatingActionButton: AddProjectButton(),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
-            bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: Colors.white,
-              iconSize: 22,
-              elevation: 999,
-              type: BottomNavigationBarType.fixed,
-              currentIndex: currentPageSelected,
-              selectedLabelStyle:
-                  TextStyle(color: Color(0xff65ACEB), fontSize: 10),
-              unselectedItemColor: Color(0xff65ACEB),
-              unselectedFontSize: 10,
-              items: [
-                BottomNavigationBarItem(
-                  label: 'Overview',
-                  activeIcon: getShaderMask(Icons.house_rounded),
-                  icon: Icon(Icons.house_rounded, color: Color(0xff65ACEB)),
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black45, blurRadius: 1, spreadRadius: 0)
+                  ]),
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
-                BottomNavigationBarItem(
-                    activeIcon: getShaderMask(Icons.calendar_today_rounded),
-                    label: 'Calendar',
-                    icon: Icon(
-                      Icons.calendar_today_rounded,
-                      color: Color(0xff65ACEB),
-                    )),
-                BottomNavigationBarItem(
-                    activeIcon: getShaderMask(Icons.analytics),
-                    label: 'Analytics',
-                    icon: Icon(
-                      Icons.analytics,
-                      color: Color(0xff65ACEB),
-                    )),
-                BottomNavigationBarItem(
-                    activeIcon: getShaderMask(Icons.person),
-                    label: 'Account',
-                    icon: Icon(
-                      Icons.person,
-                      color: Color(0xff65ACEB),
-                    )),
-              ],
-              onTap: (index) {
-                setState(() {
-                  currentPageSelected = index;
-                });
-              },
+                child: BottomNavigationBar(
+                  backgroundColor: Colors.white,
+                  iconSize: 25,
+                  elevation: 999,
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: currentPageSelected,
+                  selectedLabelStyle:
+                      TextStyle(color: Color(0xff65ACEB), fontSize: 10),
+                  unselectedItemColor: Color(0xff65ACEB),
+                  unselectedFontSize: 10,
+                  items: [
+                    BottomNavigationBarItem(
+                      label: '',
+                      activeIcon: getShaderMask(Icons.house_rounded),
+                      icon: Icon(Icons.house_rounded, color: Color(0xffd5d7e3)),
+                    ),
+                    BottomNavigationBarItem(
+                        activeIcon: getShaderMask(Icons.calendar_today_rounded),
+                        label: '',
+                        icon: Icon(
+                          Icons.calendar_today_rounded,
+                          color: Color(0xffd5d7e3),
+                        )),
+                    BottomNavigationBarItem(
+                        activeIcon: getShaderMask(Icons.analytics),
+                        label: '',
+                        icon: Icon(
+                          Icons.analytics,
+                          color: Color(0xffd5d7e3),
+                        )),
+                    BottomNavigationBarItem(
+                        activeIcon: getShaderMask(Icons.person),
+                        label: '',
+                        icon: Icon(
+                          Icons.person,
+                          color: Color(0xffd5d7e3),
+                        )),
+                  ],
+                  onTap: (index) {
+                    setState(() {
+                      currentPageSelected = index;
+                    });
+                  },
+                ),
+              ),
             ),
             body: Stack(
               alignment: Alignment.center,
@@ -93,8 +110,8 @@ class DashboardState extends State<Dashboard> {
     return ShaderMask(
       shaderCallback: (bounds) {
         return LinearGradient(colors: <Color>[
-          Color(0xff65ACEB),
-          Color(0xff007AE5),
+          Color(0xff243C51),
+          Color(0xff243C51),
         ], tileMode: TileMode.clamp)
             .createShader(bounds);
       },
