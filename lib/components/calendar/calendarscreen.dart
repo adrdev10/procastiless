@@ -18,7 +18,7 @@ class CalendarScreen extends StatefulWidget {
 
 class CalendarScreenState extends State<CalendarScreen> {
   List<Project?> projects = List.empty();
-
+  bool firstLoad = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +43,8 @@ class CalendarScreenState extends State<CalendarScreen> {
         } else {
           lastDate = DateTime.now();
         }
+
+        print(projects);
         return Scaffold(
           backgroundColor: Color(0xff243C51),
           appBar: CalendarAppBar(

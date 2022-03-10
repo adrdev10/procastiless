@@ -191,82 +191,83 @@ class NewProjectState extends State<NewProject>
             ),
           ),
           Positioned(
-              top: MediaQuery.of(context).size.height * .45,
-              left: 20,
-              child: Row(
-                children: [
-                  ToggleButtons(
-                      renderBorder: false,
-                      onPressed: (index) {
-                        setState(() {
-                          for (var i = 0; i < _selections.length; i++) {
-                            if (i == index) {
-                              _selections[i] = true;
-                            } else {
-                              _selections[i] = false;
-                            }
-                          }
-                          if ((textEditingControllerName?.text != null ||
-                                  textEditingControllerName?.text != "") &&
-                              (_selections.any((element) => element == true)) &&
-                              (textEditingControllerTime?.text != null ||
-                                  textEditingControllerTime?.text != "")) {
-                            physicsPage = BouncingScrollPhysics();
-                            pageController?.animateToPage(1,
-                                duration: Duration(milliseconds: 600),
-                                curve: Curves.easeInOutExpo);
+            top: MediaQuery.of(context).size.height * .45,
+            left: 20,
+            child: Row(
+              children: [
+                ToggleButtons(
+                    renderBorder: false,
+                    onPressed: (index) {
+                      setState(() {
+                        for (var i = 0; i < _selections.length; i++) {
+                          if (i == index) {
+                            _selections[i] = true;
                           } else {
-                            physicsPage = NeverScrollableScrollPhysics();
+                            _selections[i] = false;
                           }
-                        });
-                      },
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 15),
-                          height: 35,
-                          width: 75,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.red),
-                          child: Center(
-                            child: Text(
-                              "HIGH",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(right: 15),
-                          height: 35,
-                          width: 75,
-                          decoration: BoxDecoration(
+                        }
+                        if ((textEditingControllerName?.text != null ||
+                                textEditingControllerName?.text != "") &&
+                            (_selections.any((element) => element == true)) &&
+                            (textEditingControllerTime?.text != null ||
+                                textEditingControllerTime?.text != "")) {
+                          physicsPage = BouncingScrollPhysics();
+                          pageController?.animateToPage(1,
+                              duration: Duration(milliseconds: 600),
+                              curve: Curves.easeInOutExpo);
+                        } else {
+                          physicsPage = NeverScrollableScrollPhysics();
+                        }
+                      });
+                    },
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 15),
+                        height: 35,
+                        width: 75,
+                        decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Color(0xffE4C864),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'MEDIUM',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 35,
-                          width: 75,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color(0xff64C6E4),
-                          ),
-                          child: Center(
-                              child: Text(
-                            'LOW',
+                            color: Colors.red),
+                        child: Center(
+                          child: Text(
+                            "HIGH",
                             style: TextStyle(color: Colors.white),
-                          )),
-                        )
-                      ],
-                      isSelected: _selections)
-                ],
-              )),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 15),
+                        height: 35,
+                        width: 75,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xffE4C864),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'MEDIUM',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 35,
+                        width: 75,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xff64C6E4),
+                        ),
+                        child: Center(
+                            child: Text(
+                          'LOW',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                      )
+                    ],
+                    isSelected: _selections)
+              ],
+            ),
+          ),
         ],
       ),
     );

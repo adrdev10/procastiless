@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Project {
   Timestamp? deadline;
   String? description;
   String? name;
-  double? progress;
+  int progress;
   String? priority;
   String? uuid;
   Project(this.deadline, this.description, this.name, this.priority, this.uuid,
