@@ -43,6 +43,7 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
     try {
       emit(ProjectLoadingState());
       var userProjects = await fetchProjectsFromFirestore();
+      var userTasks = await fetchTasksFromFirestore();
       if (userProjects.length < 1) {
         emit(ProjectZeroState());
         return;
@@ -75,6 +76,10 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
       print(e);
     }
   }
+
+  fetchTasksFromFirestore() async {}
+
+  void _createTasksForProject() async {}
 
   Future<bool> createProject(Project? project) async {
     project?.uuid = (loginBloc as LoggedIn).accountUser?.uuid;

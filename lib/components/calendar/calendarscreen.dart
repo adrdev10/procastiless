@@ -19,10 +19,36 @@ class CalendarScreen extends StatefulWidget {
 class CalendarScreenState extends State<CalendarScreen> {
   List<Project?> projects = List.empty();
   bool firstLoad = true;
+  DateTime? currentDateSelected = DateTime.now();
+  late DateTime lastDate = DateTime(DateTime.now().year);
+  List<DateTime>? date = List.empty(growable: true);
   @override
-  void initState() {
+  void didChangeDependencies() {
     // TODO: implement initState
-    super.initState();
+    super.didChangeDependencies();
+    final projectBloc =
+        BlocProvider.of<ProjectBloc>(context).state as ProjectLoadedState;
+    if (projectBloc is ProjectLoadedState) {
+      date?.addAll(
+          projectBloc.projects.map((e) => e!.deadline!.toDate()).toList());
+    }
+    if (date?.length != 0) {
+      date?.sort((a, b) => a.compareTo(b));
+      lastDate = date![date!.length - 1];
+    } else {
+      lastDate = DateTime.now();
+    }
+    projects = projectBloc.projects.where((element) {
+      var projectDate = element?.deadline?.toDate();
+      if ((projectDate?.day == currentDateSelected?.day) &&
+              (projectDate?.month == currentDateSelected?.month) ||
+          projectDate?.day == lastDate.day &&
+              projectDate?.month == lastDate.month) {
+        return true;
+      } else {
+        return false;
+      }
+    }).toList();
   }
 
   @override
@@ -31,19 +57,6 @@ class CalendarScreenState extends State<CalendarScreen> {
 
     return BlocBuilder<ProjectBloc, ProjectBaseState>(
       builder: (context, state) {
-        List<DateTime>? date = [];
-        late DateTime lastDate;
-        if (state is ProjectLoadedState) {
-          date.addAll(
-              state.projects.map((e) => e!.deadline!.toDate()).toList());
-        }
-        if (date.length != 0) {
-          date.sort((a, b) => a.compareTo(b));
-          lastDate = date[date.length - 1];
-        } else {
-          lastDate = DateTime.now();
-        }
-
         print(projects);
         return Scaffold(
           backgroundColor: Color(0xff243C51),
@@ -56,6 +69,7 @@ class CalendarScreenState extends State<CalendarScreen> {
             events: date,
             onDateChanged: (DateTime? value) {
               setState(() {
+                currentDateSelected = value;
                 projects =
                     (state as ProjectLoadedState).projects.where((element) {
                   var projectDate = element?.deadline?.toDate();
