@@ -4,6 +4,7 @@ import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
 import 'package:procastiless/components/project/data/project.dart';
+import 'package:procastiless/components/project/data/task.dart';
 
 class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -20,7 +21,7 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
 
     switch (event.runtimeType) {
       case FetchProjectEvent:
-        _fetchProjects(states);
+        _fetchProjects(states, event);
         break;
       case CreateProjectEvent:
         _createProject(states, (event as CreateProjectEvent).project);
@@ -39,11 +40,11 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
     }
   }
 
-  void _fetchProjects(List<ProjectBaseState> states) async {
+  void _fetchProjects(List<ProjectBaseState> states,
+      [ProjectEvents? event]) async {
     try {
       emit(ProjectLoadingState());
       var userProjects = await fetchProjectsFromFirestore();
-      var userTasks = await fetchTasksFromFirestore();
       if (userProjects.length < 1) {
         emit(ProjectZeroState());
         return;
@@ -76,10 +77,6 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
       print(e);
     }
   }
-
-  fetchTasksFromFirestore() async {}
-
-  void _createTasksForProject() async {}
 
   Future<bool> createProject(Project? project) async {
     project?.uuid = (loginBloc as LoggedIn).accountUser?.uuid;

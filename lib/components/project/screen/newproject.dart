@@ -65,12 +65,12 @@ class NewProjectState extends State<NewProject>
       child: Stack(
         children: [
           Positioned(
-            top: -90,
+            top: -70,
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(60), color: Colors.white),
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * .50,
+              height: MediaQuery.of(context).size.height * .55,
               child: Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: Column(
@@ -191,7 +191,7 @@ class NewProjectState extends State<NewProject>
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * .45,
+            top: MediaQuery.of(context).size.height * .50,
             left: 20,
             child: Row(
               children: [
@@ -351,7 +351,7 @@ class NewProjectState extends State<NewProject>
                                         .add(new CreateProjectEvent(project));
                                     context
                                         .read<ProjectBloc>()
-                                        .add(new FetchProjectEvent());
+                                        .add(new FetchProjectEvent(null));
                                     Navigator.pop(context);
                                   },
                                   child: Text("Create project"),

@@ -7,8 +7,7 @@ class ProjectLoadingState extends ProjectBaseState {}
 
 class ProjectLoadedState extends ProjectBaseState {
   List<Project?> projects;
-  List<Task?> tasks;
-  ProjectLoadedState(this.projects, this.tasks);
+  ProjectLoadedState(this.projects);
 }
 
 class ProjectZeroState extends ProjectBaseState {}

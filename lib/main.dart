@@ -5,6 +5,8 @@ import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/login/screen/LoginScreen.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
+import 'package:procastiless/components/project/bloc/task_bloc.dart';
+import 'package:procastiless/components/project/bloc/task_state.dart';
 import 'package:procastiless/widgets/splash-widget.dart';
 
 import 'components/project/bloc/project_state.dart';
@@ -20,7 +22,9 @@ void main() async {
       BlocProvider<ProjectBloc>(
         create: (context) =>
             ProjectBloc(ProjectLoadingState(), loginProvider.state),
-      )
+      ),
+      BlocProvider<TaskBloc>(
+          create: (context) => TaskBloc(TaskZeroState(), loginProvider.state))
     ],
     child: MaterialApp(
         routes: {'/login': (context) => LoginScreen()},

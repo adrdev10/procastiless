@@ -2,7 +2,10 @@ import 'package:procastiless/components/project/data/project.dart';
 
 abstract class ProjectEvents {}
 
-class FetchProjectEvent extends ProjectEvents {}
+class FetchProjectEvent extends ProjectEvents {
+  String? currentProject;
+  FetchProjectEvent(this.currentProject);
+}
 
 class ReloadProjectEvent extends ProjectEvents {}
 
