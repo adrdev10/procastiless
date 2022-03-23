@@ -59,7 +59,7 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
     List<Project> projects = [];
     final dbprojects = await firestore
         .collection('project')
-        .where('uuid', isEqualTo: (loginBloc as LoggedIn).accountUser?.uuid)
+        .where('uuid', isEqualTo: (loginBloc as LoggedIn).auth.currentUser?.uid)
         .get();
     if (dbprojects.size >= 1) {
       dbprojects.docs.forEach((element) {
