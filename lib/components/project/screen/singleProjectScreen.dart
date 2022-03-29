@@ -46,6 +46,8 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
     context.read<TaskBloc>().add(new FetchTaskEvent(widget.project?.name));
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xff243C51),
+        child: Icon(Icons.add),
         onPressed: () {},
       ),
       appBar: AppBar(
