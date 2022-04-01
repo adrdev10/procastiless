@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_event.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
@@ -23,6 +24,7 @@ class SingleProjectScreen extends StatefulWidget {
 class SingleProjectScreenState extends State<SingleProjectScreen> {
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
+  TextEditingController taskName = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -35,7 +37,6 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    print(title.text);
   }
 
   void doNothing(BuildContext context) {}
@@ -48,7 +49,59 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff243C51),
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                20.0, 20.0, 20.0, 0.0), // content padding
+                            child: Column(
+                              children: [
+                                TextField(
+                                  controller: taskName,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Enter a new task'),
+                                  autofocus: true,
+                                  enabled: true,
+                                ),
+                                Row(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Task task = new Task(
+                                            color: 'red',
+                                            isCompleted: false,
+                                            name: taskName.text,
+                                            overview: 'nothing',
+                                            taskBelongsTo:
+                                                widget.project?.name);
+                                        context.read<TaskBloc>().add(
+                                            new CreateTaskEvent(
+                                                task, widget.project?.name));
+                                        taskName.clear();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Icon(Icons.send),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
+                );
+              });
+        },
       ),
       appBar: AppBar(
         elevation: 0,
@@ -110,10 +163,9 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                       backgroundColor: Color(0xff5686b0),
                       value: (state is TaskLoadedState)
                           ? (state.tasks!
-                                      .where((element) => element.isCompleted!)
-                                      .length /
-                                  (state).tasks!.length) *
-                              100
+                                  .where((element) => element.isCompleted!)
+                                  .length /
+                              (state).tasks!.length)
                           : 0,
                       minHeight: 13,
                     ),
@@ -231,7 +283,8 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                           onPressed: (BuildContext context) {
                                             context.read<TaskBloc>().add(
                                                 new DeleteTaskEvent(
-                                                    state.tasks![i].name!));
+                                                    state.tasks![i].name!,
+                                                    widget.project?.name));
                                           },
                                           backgroundColor: Color(0xFFFE4A49),
                                           foregroundColor: Colors.white,
@@ -247,18 +300,28 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                         SlidableAction(
                                           // An action can be bigger than the others.
                                           flex: 2,
-                                          onPressed: doNothing,
-                                          backgroundColor: Color(0xFF7BC043),
+                                          onPressed: (BuildContext context) {
+                                            final task = state.tasks![i];
+                                            task.isCompleted =
+                                                !(task.isCompleted)!;
+                                            context.read<TaskBloc>().add(
+                                                UpdateTaskEvent(
+                                                    task.name!,
+                                                    widget.project?.name,
+                                                    task));
+                                          },
+                                          backgroundColor:
+                                              (state.tasks![i].isCompleted!)
+                                                  ? Colors.grey
+                                                  : Color(0xFF7BC043),
                                           foregroundColor: Colors.white,
-                                          icon: Icons.archive,
-                                          label: 'Archive',
-                                        ),
-                                        SlidableAction(
-                                          onPressed: doNothing,
-                                          backgroundColor: Color(0xFF0392CF),
-                                          foregroundColor: Colors.white,
-                                          icon: Icons.save,
-                                          label: 'Save',
+                                          icon: (state.tasks![i].isCompleted!)
+                                              ? Icons.check_circle
+                                              : Icons
+                                                  .check_box_outline_blank_rounded,
+                                          label: (state.tasks![i].isCompleted!)
+                                              ? "Mark undone"
+                                              : 'Mark done',
                                         ),
                                       ],
                                     ),
@@ -296,8 +359,11 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                               "${state.tasks?[i].name}",
                                               style: TextStyle(
                                                   fontSize: 15,
-                                                  decoration: TextDecoration
-                                                      .lineThrough),
+                                                  decoration: (state.tasks![i]
+                                                          .isCompleted!)
+                                                      ? TextDecoration
+                                                          .lineThrough
+                                                      : TextDecoration.none),
                                             ),
                                           ),
                                         ],
@@ -307,19 +373,307 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                             }),
                       ),
                     );
+                  } else if (state is TaskZeroState) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Center(child: Text("No tasks found")),
+                    );
                   }
-                  if (state is TaskLoadingState) {
-                    return LinearProgressIndicator();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Center(child: Text("No tasks found")),
+                  return Shimmer.fromColors(
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.white,
+                    enabled: true,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      padding: EdgeInsets.all(15.0),
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            style: TextStyle(
+                                fontSize: 25, color: Color(0xff243C51)),
+                            controller: title,
+                            decoration: InputDecoration.collapsed(
+                              hintText: "",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Shimmer.fromColors(
+                                baseColor: Colors.black12,
+                                highlightColor: Colors.white,
+                                loop: 3,
+                                child: Text("Progress "),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.width / 120,
+                          ),
+                          Shimmer.fromColors(
+                            baseColor: Colors.black12,
+                            highlightColor: Colors.white,
+                            loop: 3,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              width: MediaQuery.of(context).size.width * .9,
+                              height: 14.5,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                child: LinearProgressIndicator(
+                                  color: Color(0xff243C51),
+                                  backgroundColor: Color(0xff5686b0),
+                                  value: 0,
+                                  minHeight: 13,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextField(
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            style: TextStyle(
+                                fontSize: 13, color: Color(0xffa5a9ad)),
+                            controller: description,
+                            decoration: InputDecoration.collapsed(
+                              hintText: "",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.calendar_today_rounded),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Deadline",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xffa5a9ad)),
+                                      ),
+                                      Text(
+                                        DateFormat.yMMMd().format(
+                                            widget.project!.deadline!.toDate()),
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.task_alt_outlined),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Status",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xffa5a9ad)),
+                                      ),
+                                      Shimmer.fromColors(
+                                        child: Text("Some text"),
+                                        baseColor: Colors.black12,
+                                        highlightColor: Colors.white,
+                                        loop: 3,
+                                      )
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "Tasks ",
+                            style: TextStyle(
+                                fontSize: 15, color: Color(0xff243C51)),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 })
               ],
             ),
           );
-        return Container();
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.all(15.0),
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                style: TextStyle(fontSize: 25, color: Color(0xff243C51)),
+                controller: title,
+                decoration: InputDecoration.collapsed(
+                  hintText: "",
+                  border: InputBorder.none,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Shimmer.fromColors(
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.white,
+                    loop: 3,
+                    child: Text("Progress "),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width / 120,
+              ),
+              Shimmer.fromColors(
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 3,
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  width: MediaQuery.of(context).size.width * .9,
+                  height: 14.5,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    child: LinearProgressIndicator(
+                      color: Color(0xff243C51),
+                      backgroundColor: Color(0xff5686b0),
+                      value: 0,
+                      minHeight: 13,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                style: TextStyle(fontSize: 13, color: Color(0xffa5a9ad)),
+                controller: description,
+                decoration: InputDecoration.collapsed(
+                  hintText: "",
+                  border: InputBorder.none,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.calendar_today_rounded),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Deadline",
+                            style: TextStyle(
+                                fontSize: 14, color: Color(0xffa5a9ad)),
+                          ),
+                          Text(
+                            DateFormat.yMMMd()
+                                .format(widget.project!.deadline!.toDate()),
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.task_alt_outlined),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Status",
+                            style: TextStyle(
+                                fontSize: 14, color: Color(0xffa5a9ad)),
+                          ),
+                          Shimmer.fromColors(
+                            child: Text("Some text"),
+                            baseColor: Colors.black12,
+                            highlightColor: Colors.white,
+                            loop: 3,
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Tasks ",
+                style: TextStyle(fontSize: 15, color: Color(0xff243C51)),
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: List.filled(10, null).length,
+                    itemBuilder: (context, i) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.black12,
+                        highlightColor: Colors.white,
+                        loop: 3,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * .7),
+                      );
+                    }),
+              )
+            ],
+          ),
+        );
       }),
     );
   }

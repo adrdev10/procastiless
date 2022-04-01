@@ -20,7 +20,8 @@ class ReloadTaskEvent extends TaskEvents {
 
 class CreateTaskEvent extends TaskEvents {
   Task? task;
-  CreateTaskEvent(this.task);
+  String? currentProject;
+  CreateTaskEvent(this.task, this.currentProject);
 
   @override
   // TODO: implement props
@@ -29,15 +30,20 @@ class CreateTaskEvent extends TaskEvents {
 
 class DeleteTaskEvent extends TaskEvents {
   String taskName;
-  DeleteTaskEvent(this.taskName);
+  String? currentProject;
+  DeleteTaskEvent(this.taskName, this.currentProject);
 
   @override
   // TODO: implement props
-  List<Object?> get props => [taskName];
+  List<Object?> get props => [taskName, currentProject];
 }
 
 class UpdateTaskEvent extends TaskEvents {
+  String taskName;
+  String? currentProject;
+  Task? task;
+  UpdateTaskEvent(this.taskName, this.currentProject, this.task);
   @override
   // TODO: implement props
-  List<Object?> get props => [];
+  List<Object?> get props => [taskName, currentProject, task];
 }

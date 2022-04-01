@@ -24,12 +24,19 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
         states.add(await _fetchTasks(states, event));
         break;
       case CreateTaskEvent:
-        _createTasksForProject(states, (event as CreateTaskEvent).task);
+        yield TaskLoadingState();
+        states.add(await _createTasksForProject(
+            states, event, (event as CreateTaskEvent).task));
         break;
       case DeleteTaskEvent:
         yield TaskLoadingState();
         states.add(await _deleteTask(
             states, event, (event as DeleteTaskEvent).taskName));
+        break;
+      case UpdateTaskEvent:
+        yield TaskLoadingState();
+        states.add(await _updateTasks(
+            states, event, (event as UpdateTaskEvent).taskName, event.task));
         break;
       case ReloadTaskEvent:
         break;
@@ -40,6 +47,18 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
     for (TaskBaseState state in states) {
       yield state;
     }
+  }
+
+  Future<TaskBaseState> _updateTasks(List<TaskBaseState> states,
+      TaskEvents event, String taskName, Task? task) async {
+    var projectForUpdate =
+        firestore.collection('task').where('name', isEqualTo: taskName);
+    var arraySnap = await projectForUpdate.get();
+    for (var project in arraySnap.docs) {
+      await project.reference.update(task!.toJson());
+    }
+    return _fetchTasks(
+        states, FetchTaskEvent((event as UpdateTaskEvent).currentProject));
   }
 
   Future<TaskBaseState> _fetchTasks(
@@ -72,10 +91,11 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
     return [];
   }
 
-  Future<bool> _createTasksForProject(
-      List<TaskBaseState> states, Task? task) async {
-    var projectAdded = await firestore.collection('task').add(task!.toJson());
-    return projectAdded != null;
+  Future<TaskBaseState> _createTasksForProject(
+      List<TaskBaseState> states, TaskEvents event, Task? task) async {
+    await firestore.collection('task').add(task!.toJson());
+    return _fetchTasks(
+        states, FetchTaskEvent((event as CreateTaskEvent).currentProject));
   }
 
   Future<TaskBaseState> _deleteTask(
@@ -86,6 +106,7 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
     for (var project in arraySnap.docs) {
       await project.reference.delete();
     }
-    return _fetchTasks(states, event);
+    return _fetchTasks(
+        states, FetchTaskEvent((event as DeleteTaskEvent).currentProject));
   }
 }

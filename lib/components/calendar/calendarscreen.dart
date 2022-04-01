@@ -27,7 +27,9 @@ class CalendarScreenState extends State<CalendarScreen> {
     // TODO: implement initState
     super.didChangeDependencies();
     final projectBloc =
-        BlocProvider.of<ProjectBloc>(context).state as ProjectLoadedState;
+        (BlocProvider.of<ProjectBloc>(context).state) is ProjectZeroState
+            ? BlocProvider.of<ProjectBloc>(context).state as ProjectZeroState
+            : BlocProvider.of<ProjectBloc>(context).state as ProjectLoadedState;
     if (projectBloc is ProjectLoadedState) {
       date?.addAll(
           projectBloc.projects.map((e) => e!.deadline!.toDate()).toList());
@@ -38,17 +40,19 @@ class CalendarScreenState extends State<CalendarScreen> {
     } else {
       lastDate = DateTime.now();
     }
-    projects = projectBloc.projects.where((element) {
-      var projectDate = element?.deadline?.toDate();
-      if ((projectDate?.day == currentDateSelected?.day) &&
-              (projectDate?.month == currentDateSelected?.month) ||
-          projectDate?.day == lastDate.day &&
-              projectDate?.month == lastDate.month) {
-        return true;
-      } else {
-        return false;
-      }
-    }).toList();
+    if (ProjectBloc is ProjectLoadedState) {
+      (projectBloc as ProjectLoadedState).projects.where((element) {
+        var projectDate = element?.deadline?.toDate();
+        if ((projectDate?.day == currentDateSelected?.day) &&
+                (projectDate?.month == currentDateSelected?.month) ||
+            projectDate?.day == lastDate.day &&
+                projectDate?.month == lastDate.month) {
+          return true;
+        } else {
+          return false;
+        }
+      }).toList();
+    }
   }
 
   @override
