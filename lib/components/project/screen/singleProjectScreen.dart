@@ -137,7 +137,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 30,
                 ),
                 Row(
                   children: [
@@ -249,11 +249,14 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 Text(
                   "Tasks ",
                   style: TextStyle(fontSize: 15, color: Color(0xff243C51)),
+                ),
+                SizedBox(
+                  height: 12,
                 ),
                 BlocBuilder<TaskBloc, TaskBaseState>(builder: (context, state) {
                   if (state is TaskLoadedState) {
@@ -265,7 +268,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                             itemCount: state.tasks?.length,
                             itemBuilder: (context, i) {
                               return Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.only(bottom: 15),
                                 child: Slidable(
                                     key: Key(i.toString()),
                                     startActionPane: ActionPane(

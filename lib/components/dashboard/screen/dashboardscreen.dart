@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/calendar/calendarscreen.dart';
+import 'package:procastiless/components/dashboard/screen/profilescreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
@@ -17,16 +17,6 @@ class DashboardState extends State<Dashboard> {
   int currentPageSelected = 0;
   @override
   Widget build(BuildContext context) {
-    var tempWdiget = Container(
-      child: ElevatedButton(
-        child: Text('Sign out'),
-        onPressed: () {
-          context.read<LoginBloc>().add(new LogOutEvent());
-          Navigator.popUntil(context, ModalRoute.withName('/login'));
-        },
-      ),
-    );
-
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return Scaffold(
@@ -99,7 +89,7 @@ class DashboardState extends State<Dashboard> {
               children: [
                 if (currentPageSelected == 0) ProjectScreen(),
                 if (currentPageSelected == 1) CalendarScreen(),
-                if (currentPageSelected == 3) Center(child: tempWdiget),
+                if (currentPageSelected == 3) Center(child: ProfileScreen()),
               ],
             ));
       },

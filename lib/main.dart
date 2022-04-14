@@ -27,6 +27,7 @@ void main() async {
           create: (context) => TaskBloc(TaskZeroState(), loginProvider.state))
     ],
     child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {'/login': (context) => LoginScreen()},
         theme: MainTheme().getTheme(),
         title: 'Procastiless',
