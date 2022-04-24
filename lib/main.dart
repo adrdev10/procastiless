@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
@@ -13,6 +14,9 @@ import 'components/project/bloc/project_state.dart';
 import 'config/themes/maintheme.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   var loginProvider = LoginBloc(WaitingToLogin());

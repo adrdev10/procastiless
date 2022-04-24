@@ -4,7 +4,6 @@ import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
 import 'package:procastiless/components/project/data/project.dart';
-import 'package:procastiless/components/project/data/task.dart';
 
 class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;

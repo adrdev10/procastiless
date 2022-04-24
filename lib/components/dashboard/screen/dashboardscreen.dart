@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/calendar/calendarscreen.dart';
 import 'package:procastiless/components/dashboard/screen/profilescreen.dart';
+import 'package:procastiless/components/dashboard/screen/statsscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
-import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/screen/projectscreen.dart';
 import 'package:procastiless/widgets/addprojectbutton.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -15,12 +16,20 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> {
   int currentPageSelected = 0;
+  TutorialSettigns tutorialSettigns = new TutorialSettigns(true, true);
+  late final List<TargetFocus> targets;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return Scaffold(
-            floatingActionButton: AddProjectButton(),
+            floatingActionButton: AddProjectButton(tutorialSettigns),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: Container(
@@ -87,8 +96,9 @@ class DashboardState extends State<Dashboard> {
             body: Stack(
               alignment: Alignment.center,
               children: [
-                if (currentPageSelected == 0) ProjectScreen(),
+                if (currentPageSelected == 0) ProjectScreen(tutorialSettigns),
                 if (currentPageSelected == 1) CalendarScreen(),
+                if (currentPageSelected == 2) StatsScreen(),
                 if (currentPageSelected == 3) Center(child: ProfileScreen()),
               ],
             ));
@@ -112,4 +122,10 @@ class DashboardState extends State<Dashboard> {
       ),
     );
   }
+}
+
+class TutorialSettigns {
+  bool firstTutorial;
+  bool showTutorial;
+  TutorialSettigns(this.showTutorial, this.firstTutorial);
 }

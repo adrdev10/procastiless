@@ -1,5 +1,4 @@
 import 'package:procastiless/components/project/data/project.dart';
-import 'package:procastiless/components/project/data/task.dart';
 
 abstract class ProjectBaseState {}
 

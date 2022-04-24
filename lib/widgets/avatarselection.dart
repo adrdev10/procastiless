@@ -12,9 +12,30 @@ class AvatarSelector extends StatefulWidget {
   State<StatefulWidget> createState() => AvatarSelectorState();
 }
 
-class AvatarSelectorState extends State<AvatarSelector> {
+class AvatarSelectorState extends State<AvatarSelector>
+    with SingleTickerProviderStateMixin {
   int? selectedAvatar;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  AnimationController? animation;
+  late Animation sizeAnimation;
+  CarouselController? carouselController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Rebuilding the screen when animation goes ahead
+    //For single time
+    //controller.forward()
+    animation = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1800));
+    sizeAnimation = Tween<double>(begin: 10, end: 20).animate(animation!);
+    animation?.repeat();
+    carouselController = CarouselController();
+    animation?.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -23,11 +44,7 @@ class AvatarSelectorState extends State<AvatarSelector> {
         child: Scaffold(
           body: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [Color(0xff7E33B8), Color(0xffEE5A3A)],
-              ),
+              color: Color(0xff243C51),
             ),
             child: Column(
               children: [
@@ -37,7 +54,7 @@ class AvatarSelectorState extends State<AvatarSelector> {
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
-                    'Time to pick your Prokimon',
+                    'Time to pick your Procraimon',
                     style: Theme.of(context).textTheme.bodyText1?.apply(
                         color: Colors.white,
                         fontSizeFactor: 2.8,
@@ -60,23 +77,47 @@ class AvatarSelectorState extends State<AvatarSelector> {
                 SizedBox(
                   height: 50,
                 ),
-                CarouselSlider(
-                  items: [
-                    Image.asset('assets/images/char2.png'),
-                    Image.asset(
-                      'assets/images/char1.png',
-                      height: 100,
+                Stack(
+                  children: [
+                    Positioned(
+                      top: 60,
+                      left: MediaQuery.of(context).size.width * .06 +
+                          (-sizeAnimation.value),
+                      child: GestureDetector(
+                          onTap: () {
+                            print("Hello");
+                            carouselController
+                                ?.animateToPage(selectedAvatar! + 1);
+                          },
+                          child: Icon(Icons.keyboard_arrow_left_rounded,
+                              size: 60)),
                     ),
-                    Image.asset('assets/images/char3.png'),
+                    Positioned(
+                      top: 60,
+                      right: MediaQuery.of(context).size.width * .06 +
+                          -sizeAnimation.value,
+                      child: Icon(Icons.keyboard_arrow_right_rounded, size: 60),
+                    ),
+                    CarouselSlider(
+                      carouselController: carouselController,
+                      items: [
+                        Image.asset('assets/images/char2.png'),
+                        Image.asset(
+                          'assets/images/char1.png',
+                          height: 100,
+                        ),
+                        Image.asset('assets/images/char3.png'),
+                      ],
+                      options: CarouselOptions(
+                          onPageChanged: (index, reason) {
+                            selectedAvatar = index;
+                          },
+                          enableInfiniteScroll: false,
+                          enlargeStrategy: CenterPageEnlargeStrategy.height,
+                          initialPage: 1,
+                          disableCenter: false),
+                    ),
                   ],
-                  options: CarouselOptions(
-                      onPageChanged: (index, reason) {
-                        selectedAvatar = index;
-                      },
-                      enableInfiniteScroll: false,
-                      enlargeStrategy: CenterPageEnlargeStrategy.height,
-                      initialPage: 1,
-                      disableCenter: false),
                 ),
                 SizedBox(
                   height: 100,

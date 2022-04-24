@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -46,6 +45,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
     // TODO: implement build
     context.read<TaskBloc>().add(new FetchTaskEvent(widget.project?.name));
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff243C51),
         child: Icon(Icons.add),

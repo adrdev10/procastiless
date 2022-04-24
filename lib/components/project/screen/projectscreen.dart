@@ -1,25 +1,32 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:procastiless/components/dashboard/screen/dashboardscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
-import 'package:procastiless/components/project/bloc/task_event.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
 import 'package:procastiless/components/project/data/project.dart';
 import 'package:procastiless/components/project/screen/singleProjectScreen.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ProjectScreen extends StatefulWidget {
+  final TutorialSettigns showTutorial;
+  ProjectScreen(this.showTutorial);
   @override
   State<StatefulWidget> createState() => ProjectScreenState();
 }
 
 class ProjectScreenState extends State<ProjectScreen> {
+  late final List<TargetFocus> targets;
+
+  final GlobalKey _key2 = GlobalKey();
+  final GlobalKey _key3 = GlobalKey();
+
   convertExpToLevel(int? exp) {
     if (exp == null) {
       return;
@@ -34,22 +41,103 @@ class ProjectScreenState extends State<ProjectScreen> {
   @override
   void initState() {
     super.initState();
+    targets = [
+      TargetFocus(identify: "Target 2", keyTarget: _key2, contents: [
+        TargetContent(
+          align: ContentAlign.top,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Your List Of Projects 🦄',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40.0),
+                child: Text(
+                  'To delete a project just long press on the project until it is removed',
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
+        ),
+      ]),
+      TargetFocus(identify: "Target 3", keyTarget: _key3, contents: [
+        TargetContent(
+          align: ContentAlign.top,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Leveling 👻',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40.0),
+                child: Text(
+                  'Doing more projects will increase your level',
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
+        ),
+      ]),
+    ];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  void showTutorial() {
+    TutorialCoachMark tutorial = TutorialCoachMark(
+      context,
+      targets: targets, // List<TargetFocus>
+      colorShadow: Colors.black38, // DEFAULT Colors.black
+      // alignSkip: Alignment.bottomRight,
+      // textSkip: "SKIP",
+      paddingFocus: 10,
+      // focusAnimationDuration: Duration(milliseconds: 500),
+      // pulseAnimationDuration: Duration(milliseconds: 500),
+      // pulseVariation: Tween(begin: 1.0, end: 0.99),
+      onFinish: () {
+        print("Your List Of Projects");
+        widget.showTutorial.showTutorial = false;
+      },
+      onClickTarget: (target) {
+        print(target);
+      },
+      onSkip: () {
+        print("skip");
+        widget.showTutorial.showTutorial = false;
+      },
+    )..show();
   }
 
   @override
   Widget build(BuildContext context) {
-    // changeToCollectedData(context);
-    // TODO: implement build
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         if (state is LoggedIn) {
-          context.read<ProjectBloc>().add(new FetchProjectEvent("Project X"));
+          context.read<ProjectBloc>().add(
+                new FetchProjectEvent(""),
+              );
           return SafeArea(
             child: Scaffold(
               body: Container(
                 color: Colors.white12,
-                margin: EdgeInsets.only(top: 7),
-                padding: const EdgeInsets.all(2),
+                margin: EdgeInsets.only(top: 2),
                 width: double.infinity,
                 height: double.infinity,
                 child: Column(
@@ -100,6 +188,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                           child: Text(
                             'Level ' +
                                 '${convertExpToLevel(state.accountUser?.exp)}',
+                            key: _key3,
                             style: TextStyle(color: Color(0xff243C51)),
                           ),
                         )
@@ -111,10 +200,19 @@ class ProjectScreenState extends State<ProjectScreen> {
                         if (state.projects.length == 0) {
                           return Text("No Projects created");
                         }
+                        if (widget.showTutorial.showTutorial) {
+                          Future.delayed(
+                            Duration(seconds: 2),
+                            () {
+                              showTutorial();
+                            },
+                          );
+                        }
                         return BlocBuilder<TaskBloc, TaskBaseState>(
                             builder: (taskcontext, taskstate) {
                           return Expanded(
                             child: ListView.builder(
+                                key: _key2,
                                 physics: BouncingScrollPhysics(),
                                 cacheExtent: 1000,
                                 addSemanticIndexes: true,
@@ -130,23 +228,56 @@ class ProjectScreenState extends State<ProjectScreen> {
                                       state.projects[i]!.progress);
                                   return InkWell(
                                     onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return SingleProjectScreen(
-                                          project,
-                                        );
-                                      }));
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return SingleProjectScreen(
+                                              project,
+                                            );
+                                          },
+                                        ),
+                                      );
                                     },
                                     onLongPress: () {
-                                      context
-                                          .read<ProjectBloc>()
-                                          .add(new DeleteProjectEvent(project));
-                                      Future.delayed(
-                                          Duration(milliseconds: 500), () {
-                                        context
-                                            .read<ProjectBloc>()
-                                            .add(new FetchProjectEvent(""));
-                                      });
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                                "Do you want to delete this project?"),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  context
+                                                      .read<ProjectBloc>()
+                                                      .add(
+                                                          new DeleteProjectEvent(
+                                                              project));
+                                                  Future.delayed(
+                                                      Duration(
+                                                          milliseconds: 500),
+                                                      () {
+                                                    context
+                                                        .read<ProjectBloc>()
+                                                        .add(
+                                                          new FetchProjectEvent(
+                                                              ""),
+                                                        );
+                                                  });
+                                                  Future.delayed(
+                                                    Duration(milliseconds: 800),
+                                                    () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  );
+                                                },
+                                                child: Text("Ok"),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      );
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(20),

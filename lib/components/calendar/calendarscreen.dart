@@ -1,6 +1,4 @@
 import 'package:calendar_appbar/calendar_appbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +9,6 @@ import 'package:procastiless/components/project/data/project.dart';
 class CalendarScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return CalendarScreenState();
   }
 }
@@ -74,6 +71,9 @@ class CalendarScreenState extends State<CalendarScreen> {
             onDateChanged: (DateTime? value) {
               setState(() {
                 currentDateSelected = value;
+                if (state is ProjectZeroState) {
+                  return;
+                }
                 projects =
                     (state as ProjectLoadedState).projects.where((element) {
                   var projectDate = element?.deadline?.toDate();

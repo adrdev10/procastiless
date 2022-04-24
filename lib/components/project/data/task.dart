@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
+//ignore: must_be_immutable
 class Task extends Equatable {
-  String? color;
+  final String? color;
   bool? isCompleted;
-  String? name;
-  String? overview;
-  String? taskBelongsTo;
+  final String? name;
+  final String? overview;
+  final String? taskBelongsTo;
   Task(
       {this.color,
       this.isCompleted,
@@ -25,6 +24,8 @@ class Task extends Equatable {
         taskBelongsTo: json?["taskBelongsTo"]);
   }
 
+  void setIsCompleted(bool isCompleted) => isCompleted = isCompleted;
+
   Map<String, dynamic> toJson() {
     return {
       'name': this.name,
@@ -36,6 +37,5 @@ class Task extends Equatable {
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
