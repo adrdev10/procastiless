@@ -4,6 +4,7 @@ class AccountUser {
   String? avatarUrl;
   String? uuid;
   int? exp;
+  int? test;
   AccountUser(this.name, this.email, this.avatarUrl, this.uuid, this.exp);
 
   factory AccountUser.fromJson(Map<String, dynamic>? json) {
