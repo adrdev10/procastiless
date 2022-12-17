@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
@@ -105,7 +106,7 @@ class NewProjectState extends State<NewProject>
                       onSubmitted: (text) {
                         setState(() {
                           name = text;
-                          if ((textEditingControllerTime?.text != null ||
+                          if ((textEditingControllerTime?.text != null &&
                                   textEditingControllerTime?.text != "") &&
                               (datePicked != null || datePicked != "") &&
                               (textEditingControllerName != null ||
@@ -153,7 +154,7 @@ class NewProjectState extends State<NewProject>
                               datePicked = dateSelected != null
                                   ? DateFormat.yMMMMEEEEd().format(dateSelected)
                                   : "";
-                              if ((textEditingControllerName?.text != null ||
+                              if ((textEditingControllerName?.text != null &&
                                       textEditingControllerName?.text != "") &&
                                   (datePicked != null || datePicked != "") &&
                                   _selections
@@ -206,17 +207,24 @@ class NewProjectState extends State<NewProject>
                             _selections[i] = false;
                           }
                         }
-                        if ((textEditingControllerName?.text != null ||
+                        if ((textEditingControllerName?.text != null &&
                                 textEditingControllerName?.text != "") &&
                             (_selections.any((element) => element == true)) &&
-                            (textEditingControllerTime?.text != null ||
-                                textEditingControllerTime?.text != "")) {
+                            (datePicked != null)) {
                           physicsPage = BouncingScrollPhysics();
                           pageController?.animateToPage(1,
                               duration: Duration(milliseconds: 600),
                               curve: Curves.easeInOutExpo);
                         } else {
                           physicsPage = NeverScrollableScrollPhysics();
+                          Fluttertoast.showToast(
+                              msg: "Missing date or name of project",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
                         }
                       });
                     },

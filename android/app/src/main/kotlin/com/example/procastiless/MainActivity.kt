@@ -1,4 +1,4 @@
-package com.example.procastiless
+package com.adrianapps.procastiless
 
 import io.flutter.embedding.android.FlutterActivity
 

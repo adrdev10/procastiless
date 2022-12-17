@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/login/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBloc extends Bloc<LoginEvents, LoginState> {
   LoginBloc(LoginState initialState) : super(initialState);
@@ -89,6 +89,9 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
       if (userInCollection == null) {
         //Create new user in DB and update the bloc state
         userInCollection = addUser(authresult);
+      } else {
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool("isNewAccount", false);
       }
       return userInCollection;
     } catch (e) {
@@ -105,6 +108,8 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         'name': auth.user?.displayName,
         'uuid': auth.user?.uid
       });
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool("isNewAccount", true);
       return AccountUser(
           auth.user?.displayName, auth.user?.email, "", auth.user?.uid, 0);
     } catch (e) {

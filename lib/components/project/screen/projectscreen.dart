@@ -12,6 +12,7 @@ import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
 import 'package:procastiless/components/project/data/project.dart';
 import 'package:procastiless/components/project/screen/singleProjectScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ProjectScreen extends StatefulWidget {
@@ -100,29 +101,32 @@ class ProjectScreenState extends State<ProjectScreen> {
     super.didChangeDependencies();
   }
 
-  void showTutorial() {
-    TutorialCoachMark tutorial = TutorialCoachMark(
-      context,
-      targets: targets, // List<TargetFocus>
-      colorShadow: Colors.black38, // DEFAULT Colors.black
-      // alignSkip: Alignment.bottomRight,
-      // textSkip: "SKIP",
-      paddingFocus: 10,
-      // focusAnimationDuration: Duration(milliseconds: 500),
-      // pulseAnimationDuration: Duration(milliseconds: 500),
-      // pulseVariation: Tween(begin: 1.0, end: 0.99),
-      onFinish: () {
-        print("Your List Of Projects");
-        widget.showTutorial.showTutorial = false;
-      },
-      onClickTarget: (target) {
-        print(target);
-      },
-      onSkip: () {
-        print("skip");
-        widget.showTutorial.showTutorial = false;
-      },
-    )..show();
+  void showTutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    final shouldShowTutorial = prefs.getBool("isNewAccount") ?? false;
+    if (shouldShowTutorial) {
+      TutorialCoachMark(
+        context,
+        targets: targets, // List<TargetFocus>
+        colorShadow: Colors.black38, // DEFAULT Colors.black
+        // alignSkip: Alignment.bottomRight,
+        // textSkip: "SKIP",
+        paddingFocus: 10,
+        // focusAnimationDuration: Duration(milliseconds: 500),
+        // pulseAnimationDuration: Duration(milliseconds: 500),
+        // pulseVariation: Tween(begin: 1.0, end: 0.99),
+        onFinish: () {
+          print("Your List Of Projects");
+        },
+        onClickTarget: (target) {
+          print(target);
+        },
+        onSkip: () {
+          print("skip");
+        },
+      )..show();
+    }
+    prefs.setBool("isNewAccount", false);
   }
 
   @override
@@ -244,8 +248,17 @@ class ProjectScreenState extends State<ProjectScreen> {
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
+                                            backgroundColor: Color(0xff243C51),
                                             title: Text(
-                                                "Do you want to delete this project?"),
+                                                "Do you want to delete this project?",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.apply(
+                                                        fontSizeFactor: 1.65,
+                                                        color: Colors.white,
+                                                        fontWeightDelta: 1,
+                                                        fontSizeDelta: .4)),
                                             actions: [
                                               ElevatedButton(
                                                 onPressed: () {
@@ -266,13 +279,24 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                         );
                                                   });
                                                   Future.delayed(
-                                                    Duration(milliseconds: 800),
+                                                    Duration(milliseconds: 500),
                                                     () {
                                                       Navigator.pop(context);
                                                     },
                                                   );
                                                 },
-                                                child: Text("Ok"),
+                                                child: Text("Yes, delete"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Future.delayed(
+                                                    Duration(milliseconds: 50),
+                                                    () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  );
+                                                },
+                                                child: Text("No"),
                                               )
                                             ],
                                           );
@@ -281,7 +305,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(20),
-                                      margin: const EdgeInsets.all(10),
+                                      margin: const EdgeInsets.all(5),
                                       height: 120,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -296,10 +320,10 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                 CrossAxisAlignment.stretch,
                                             children: [
                                               Text(
-                                                "${state.projects[i]?.name}",
+                                                "${state.projects[i]!.name!.length >= 30 ? state.projects[i]!.name!.substring(0, 30) + '...' : state.projects[i]?.name}",
                                                 style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 18),
+                                                    fontSize: 16),
                                               ),
                                               SizedBox(
                                                 height: 10,

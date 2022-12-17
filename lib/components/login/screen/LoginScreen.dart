@@ -93,29 +93,6 @@ class LoginScreenState extends State<LoginScreen> {
                   if (state is InProcessOfLogin) ...[
                     Center(child: CircularProgressIndicator())
                   ],
-                  Positioned(
-                    bottom: 50,
-                    child: Row(
-                      children: [
-                        Text(
-                          'don\'t want an account',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              ?.apply(color: Colors.black),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            context.read<LoginBloc>().add(new SignInEvent());
-                          },
-                          child: Text('Proceed'),
-                        )
-                      ],
-                    ),
-                  ),
                 ],
               ),
             );

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/screen/newproject.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../components/dashboard/screen/dashboardscreen.dart';
@@ -40,37 +42,7 @@ class AddProjectButton extends StatelessWidget {
         ),
       ]),
     ];
-    void showTutorialFunc() {
-      TutorialCoachMark tutorial = TutorialCoachMark(
-        context,
-        targets: targets, // List<TargetFocus>
-        colorShadow: Colors.black38, // DEFAULT Colors.black
-        // alignSkip: Alignment.bottomRight,
-        // textSkip: "SKIP",
-        paddingFocus: 10,
-        // focusAnimationDuration: Duration(milliseconds: 500),
-        // pulseAnimationDuration: Duration(milliseconds: 500),
-        // pulseVariation: Tween(begin: 1.0, end: 0.99),
-        onFinish: () {
-          print("Your List Of Projects");
-          showTutorial.firstTutorial = false;
-        },
-        onClickTarget: (target) {
-          print(target);
-        },
-        onSkip: () {
-          print("skip");
-          showTutorial.firstTutorial = false;
-        },
-      )..show();
-    }
 
-    Future.delayed(
-      Duration(seconds: 2),
-      () {
-        showTutorialFunc();
-      },
-    );
     return FloatingActionButton(
       key: _key1,
       highlightElevation: 500,

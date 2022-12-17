@@ -22,12 +22,13 @@ class StatsScreenState extends State<StatsScreen> {
           alignment: Alignment.topCenter,
           children: [
             Positioned(
+              left: 10,
               top: MediaQuery.of(context).size.height * .1,
               child: Column(
                 children: [
                   Text(
-                    "Stats Page",
-                    style: TextStyle(fontSize: 19),
+                    "See your project \ninsights",
+                    style: TextStyle(fontSize: 29),
                   ),
                 ],
               ),
