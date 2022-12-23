@@ -199,7 +199,10 @@ class ProjectScreenState extends State<ProjectScreen> {
                       ],
                     ),
                     BlocBuilder<ProjectBloc, ProjectBaseState>(
-                        builder: (context, state) {
+                        buildWhen: (previous, current) {
+                      if (previous is ProjectLoadedState) return false;
+                      return true;
+                    }, builder: (context, state) {
                       if (state is ProjectLoadedState) {
                         if (state.projects.length == 0) {
                           return Text("No Projects created");
@@ -324,7 +327,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                     MainAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "${state.projects[i]!.name!.length >= 30 ? state.projects[i]!.name!.substring(0, 30) + '...' : state.projects[i]?.name}",
+                                                    "${state.projects[i]!.name!.length >= 20 ? state.projects[i]!.name!.substring(0, 30).trim() + '...' : state.projects[i]?.name?.trim()}",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 16),
@@ -356,7 +359,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                 height: 10,
                                               ),
                                               Text(
-                                                "${state.projects[i]!.description!.length >= 30 ? state.projects[i]!.description!.substring(0, 30) + '...' : state.projects[i]?.description}",
+                                                "${state.projects[i]!.description!.length >= 30 ? state.projects[i]!.description!.substring(0, 30).toUpperCase().trim() + '...' : state.projects[i]?.description!.toUpperCase().trim()}",
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 12),
@@ -394,7 +397,9 @@ class ProjectScreenState extends State<ProjectScreen> {
                       } else if (state is ProjectLoadingState) {
                         return CircularProgressIndicator();
                       } else {
-                        return Text("No Projects Found");
+                        return Center(
+                          child: Text("No Projects Found"),
+                        );
                       }
                     }),
                   ],
