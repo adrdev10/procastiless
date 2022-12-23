@@ -23,22 +23,18 @@ class CalendarScreenState extends State<CalendarScreen> {
   void didChangeDependencies() {
     // TODO: implement initState
     super.didChangeDependencies();
-    final projectBloc =
-        (BlocProvider.of<ProjectBloc>(context).state) is ProjectZeroState
-            ? BlocProvider.of<ProjectBloc>(context).state as ProjectZeroState
-            : BlocProvider.of<ProjectBloc>(context).state as ProjectLoadedState;
+    final projectBloc = (BlocProvider.of<ProjectBloc>(context).state);
     if (projectBloc is ProjectLoadedState) {
       date?.addAll(
           projectBloc.projects.map((e) => e!.deadline!.toDate()).toList());
-    }
-    if (date?.length != 0) {
-      date?.sort((a, b) => a.compareTo(b));
-      lastDate = date![date!.length - 1];
-    } else {
-      lastDate = DateTime.now();
-    }
-    if (ProjectBloc is ProjectLoadedState) {
-      (projectBloc as ProjectLoadedState).projects.where((element) {
+      projects = projectBloc.projects;
+      if (date?.length != 0) {
+        date?.sort((a, b) => a.compareTo(b));
+        lastDate = date![date!.length - 1];
+      } else {
+        lastDate = DateTime.now();
+      }
+      projects = projects.where((element) {
         var projectDate = element?.deadline?.toDate();
         if ((projectDate?.day == currentDateSelected?.day) &&
                 (projectDate?.month == currentDateSelected?.month) ||
@@ -62,11 +58,13 @@ class CalendarScreenState extends State<CalendarScreen> {
         return Scaffold(
           backgroundColor: Color(0xff243C51),
           appBar: CalendarAppBar(
+            fullCalendar: true,
             backButton: false,
             accent: Color(0xff243C51),
+            locale: "en_US",
             firstDate: DateTime.now().subtract(Duration(days: 365)),
             lastDate: lastDate != null ? lastDate : DateTime.now(),
-            selectedDate: DateTime.now(),
+            selectedDate: lastDate,
             events: date,
             onDateChanged: (DateTime? value) {
               setState(() {
@@ -112,7 +110,6 @@ class CalendarScreenState extends State<CalendarScreen> {
                             SizedBox(
                               height: 20,
                             ),
-                            CircularProgressIndicator()
                           ],
                         )
                       : ListView.builder(
