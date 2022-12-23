@@ -319,11 +319,38 @@ class ProjectScreenState extends State<ProjectScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.stretch,
                                             children: [
-                                              Text(
-                                                "${state.projects[i]!.name!.length >= 30 ? state.projects[i]!.name!.substring(0, 30) + '...' : state.projects[i]?.name}",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${state.projects[i]!.name!.length >= 30 ? state.projects[i]!.name!.substring(0, 30) + '...' : state.projects[i]?.name}",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                    height: 25,
+                                                    width: 75,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Color(0xffE4C864),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${state.projects[i]!.priority}',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                               SizedBox(
                                                 height: 10,
@@ -351,7 +378,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "${(state.projects[i]!.progress) * 100}%",
+                                              "${(taskstate is TaskLoadedState) ? taskstate.tasks!.where((element) => element.isCompleted!).length / taskstate.tasks!.length * 100 : 0}%",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 17),
