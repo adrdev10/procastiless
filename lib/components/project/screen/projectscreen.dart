@@ -381,7 +381,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "${(taskstate is TaskLoadedState) ? (taskstate.tasks!.where((element) => element.isCompleted!).length / taskstate.tasks!.length * 100).ceilToDouble() : 0}%",
+                                              "${(taskstate is TaskLoadedState) ? (taskstate.tasks!.where((element) => element.isCompleted! || element.taskBelongsTo == project.name).length / taskstate.tasks!.length * 100).ceilToDouble() : 0}%",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 17),
