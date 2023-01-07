@@ -4,8 +4,8 @@ import 'package:procastiless/components/project/data/task.dart';
 abstract class TaskEvents extends Equatable {}
 
 class FetchTaskEvent extends TaskEvents {
-  String? currentProject;
-  FetchTaskEvent(this.currentProject);
+  String? projectUUID;
+  FetchTaskEvent(this.projectUUID);
 
   @override
   // TODO: implement props

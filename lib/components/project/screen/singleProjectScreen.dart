@@ -43,7 +43,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    context.read<TaskBloc>().add(new FetchTaskEvent(widget.project?.name));
+    context.read<TaskBloc>().add(new FetchTaskEvent(widget.project?.uuid));
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
@@ -83,10 +83,10 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                             name: taskName.text,
                                             overview: 'nothing',
                                             taskBelongsTo:
-                                                widget.project?.name);
+                                                widget.project?.uuid);
                                         context.read<TaskBloc>().add(
                                             new CreateTaskEvent(
-                                                task, widget.project?.name));
+                                                task, widget.project?.uuid));
                                         taskName.clear();
                                         Navigator.pop(context);
                                       },

@@ -64,8 +64,8 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
   Future<TaskBaseState> _fetchTasks(
       List<TaskBaseState> states, TaskEvents event) async {
     try {
-      var tasks = await fetchTasksFromFirestore(
-          (event as FetchTaskEvent).currentProject);
+      var tasks =
+          await fetchTasksFromFirestore((event as FetchTaskEvent).projectUUID);
       if (tasks.length < 1) {
         return TaskZeroState();
       }
@@ -76,11 +76,11 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
     }
   }
 
-  Future<List<Task>> fetchTasksFromFirestore(String? projectName) async {
+  Future<List<Task>> fetchTasksFromFirestore(String? projectUUID) async {
     List<Task> tasks = [];
     final dbTasks = await firestore
         .collection('task')
-        .where('taskBelongsTo', isEqualTo: projectName)
+        .where('taskBelongsTo', isEqualTo: projectUUID)
         .get();
     if (dbTasks.size >= 1) {
       dbTasks.docs.forEach((element) {
