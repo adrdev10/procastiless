@@ -10,7 +10,10 @@ extension BetterColor on Color {
   static Color returnHexCode(String? hexValue) {
     StringBuffer hexColor = StringBuffer();
     hexValue = hexValue ?? "fffff";
-    hexColor..write("0x")..write("ff")..write(hexValue);
+    hexColor
+      ..write("0x")
+      ..write("ff")
+      ..write(hexValue);
     return Color(int.parse(hexColor.toString()));
   }
 }
