@@ -89,7 +89,7 @@ class StatsScreenState extends State<StatsScreen> {
                                   Text('0')
                                 else
                                   Text(
-                                      '${(prstate as ProjectLoadedState).projects.where((e) => e!.progress == 1).length}'),
+                                      '${(prstate as ProjectLoadedState).projects.where((e) => e!.progress >= 100).length}'),
                               ],
                             ),
                             Column(

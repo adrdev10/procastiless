@@ -38,6 +38,11 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
         states.add(await _updateTasks(
             states, event, (event as UpdateTaskEvent).taskName, event.task));
         break;
+      case FetchAllTasks:
+        yield TaskLoadingState();
+        states.add(await _fetchAllTasks(
+            states, event, (event as FetchAllTasks).projectIds));
+        break;
       case ReloadTaskEvent:
         break;
       default:
@@ -64,23 +69,24 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
   Future<TaskBaseState> _fetchTasks(
       List<TaskBaseState> states, TaskEvents event) async {
     try {
-      var tasks =
-          await fetchTasksFromFirestore((event as FetchTaskEvent).projectUUID);
+      var tasks = await fetchTasksFromFirestore((event as FetchTaskEvent).id);
       if (tasks.length < 1) {
         return TaskZeroState();
       }
-      return TaskLoadedState(tasks);
+      // Create a new instance of TaskLoadedState with updated tasks.
+      var loadedTasks = TaskLoadedState(tasks: tasks);
+      return loadedTasks;
     } catch (e) {
       print(e);
       return TaskZeroState();
     }
   }
 
-  Future<List<Task>> fetchTasksFromFirestore(String? projectUUID) async {
+  Future<List<Task>> fetchTasksFromFirestore(String? id) async {
     List<Task> tasks = [];
     final dbTasks = await firestore
         .collection('task')
-        .where('taskBelongsTo', isEqualTo: projectUUID)
+        .where('taskBelongsTo', isEqualTo: id)
         .get();
     if (dbTasks.size >= 1) {
       dbTasks.docs.forEach((element) {
@@ -107,6 +113,27 @@ class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
       await project.reference.delete();
     }
     return _fetchTasks(
-        states, FetchTaskEvent((event as DeleteTaskEvent).currentProject));
+        states, FetchTaskEvent((event as DeleteTaskEvent).projectUUID));
+  }
+
+  Future<TaskBaseState> _fetchAllTasks(List<TaskBaseState> states,
+      TaskEvents event, List<String?> projectIds) async {
+    List<Task> allTasks = [];
+    for (var projectId in projectIds) {
+      // Fetch tasks related to the current projectId
+      var projectTasksQuery = FirebaseFirestore.instance
+          .collection('task')
+          .where('taskBelongsTo', isEqualTo: projectId);
+
+      var projectTasksSnapshot = await projectTasksQuery.get();
+      var projectTasks = projectTasksSnapshot.docs
+          .map((doc) => Task.fromJson(doc.data()))
+          .toList();
+
+      // Add the tasks to the cumulative list
+      allTasks.addAll(projectTasks);
+    }
+
+    return TaskLoadedState(tasks: allTasks);
   }
 }

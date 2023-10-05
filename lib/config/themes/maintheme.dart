@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class MainThemeInterface {
@@ -18,23 +16,24 @@ class MainTheme extends MainThemeInterface {
     return ThemeData(
       fontFamily: 'Poppings',
       textTheme: TextTheme(
-        bodyText1: GoogleFonts.poppins(
+        bodyLarge: GoogleFonts.poppins(
             color: Color(0xff2d4a63), fontWeight: FontWeight.bold),
-        headline1: GoogleFonts.poppins(color: Color(0xff525252)),
-        headline2: GoogleFonts.poppins(color: Color(0xff2d4a63)),
-        headline3: GoogleFonts.poppins(
+        displayLarge: GoogleFonts.poppins(color: Color(0xff525252)),
+        displayMedium: GoogleFonts.poppins(color: Color(0xff2d4a63)),
+        displaySmall: GoogleFonts.poppins(
             color: Color(0xff525252),
             fontWeight: FontWeight.bold,
             fontSize: 30),
-        headline4: GoogleFonts.poppins(foreground: Paint()..shader = gradiant),
-        headline5: TextStyle(
+        headlineMedium:
+            GoogleFonts.poppins(foreground: Paint()..shader = gradiant),
+        headlineSmall: TextStyle(
             color: Color(0xff3378B8),
             fontWeight: FontWeight.bold,
             letterSpacing: .02),
-        headline6: TextStyle(foreground: Paint()..shader = gradiant),
-        subtitle1: GoogleFonts.poppins(
+        titleLarge: TextStyle(foreground: Paint()..shader = gradiant),
+        titleMedium: GoogleFonts.poppins(
             color: Color(0xff3378B8), fontWeight: FontWeight.bold),
-        bodyText2: GoogleFonts.poppins(
+        bodyMedium: GoogleFonts.poppins(
             color: Color(0xff2d4a63), fontWeight: FontWeight.bold),
       ),
     );

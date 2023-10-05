@@ -9,8 +9,10 @@ import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
+import 'package:procastiless/components/project/bloc/task_event.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
 import 'package:procastiless/components/project/data/project.dart';
+import 'package:procastiless/components/project/data/task.dart';
 import 'package:procastiless/components/project/screen/singleProjectScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -27,6 +29,7 @@ class ProjectScreenState extends State<ProjectScreen> {
 
   final GlobalKey _key2 = GlobalKey();
   final GlobalKey _key3 = GlobalKey();
+  bool tasksNotAlreadyAvailable = true;
 
   convertExpToLevel(int? exp) {
     if (exp == null) {
@@ -96,17 +99,11 @@ class ProjectScreenState extends State<ProjectScreen> {
     ];
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
   void showTutorial() async {
     final prefs = await SharedPreferences.getInstance();
     final shouldShowTutorial = prefs.getBool("isNewAccount") ?? false;
     if (shouldShowTutorial) {
       TutorialCoachMark(
-        context,
         targets: targets, // List<TargetFocus>
         colorShadow: Colors.black38, // DEFAULT Colors.black
         // alignSkip: Alignment.bottomRight,
@@ -124,7 +121,7 @@ class ProjectScreenState extends State<ProjectScreen> {
         onSkip: () {
           print("skip");
         },
-      )..show();
+      )..show(context: context);
     }
     prefs.setBool("isNewAccount", false);
   }
@@ -134,9 +131,12 @@ class ProjectScreenState extends State<ProjectScreen> {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         if (state is LoggedIn) {
-          context.read<ProjectBloc>().add(
-                new FetchProjectEvent(""),
-              );
+          if (tasksNotAlreadyAvailable) {
+            context.read<ProjectBloc>().add(
+                  new FetchProjectEvent(""),
+                );
+            tasksNotAlreadyAvailable = false;
+          }
           return SafeArea(
             child: Scaffold(
               body: Container(
@@ -199,14 +199,14 @@ class ProjectScreenState extends State<ProjectScreen> {
                       ],
                     ),
                     BlocBuilder<ProjectBloc, ProjectBaseState>(
-                        buildWhen: (previous, current) {
-                      if (previous is ProjectLoadedState) return false;
-                      return true;
-                    }, builder: (context, state) {
+                        builder: (context, state) {
                       if (state is ProjectLoadedState) {
                         if (state.projects.length == 0) {
                           return Text("No Projects created");
                         }
+                        context.read<TaskBloc>().add(FetchAllTasks(
+                            state.projects.map((e) => e?.id).toList()));
+
                         if (widget.showTutorial.showTutorial) {
                           Future.delayed(
                             Duration(seconds: 2),
@@ -221,18 +221,23 @@ class ProjectScreenState extends State<ProjectScreen> {
                             child: ListView.builder(
                                 key: _key2,
                                 physics: BouncingScrollPhysics(),
-                                cacheExtent: 1000,
-                                addSemanticIndexes: true,
-                                primary: true,
                                 itemCount: state.projects.length,
                                 itemBuilder: (context, i) {
+                                  List<Task> tasks = [];
                                   Project project = Project(
                                       state.projects[i]!.deadline,
                                       state.projects[i]!.description,
                                       state.projects[i]!.name,
                                       state.projects[i]!.priority,
                                       state.projects[i]!.uuid,
-                                      state.projects[i]!.progress);
+                                      state.projects[i]!.progress,
+                                      state.projects[i]!.id);
+                                  if (taskstate is TaskLoadedState) {
+                                    tasks = taskstate.tasks!
+                                        .where((element) =>
+                                            element.taskBelongsTo == project.id)
+                                        .toList();
+                                  }
                                   return InkWell(
                                     onTap: () {
                                       Navigator.push(
@@ -241,6 +246,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                           builder: (context) {
                                             return SingleProjectScreen(
                                               project,
+                                              tasks,
                                             );
                                           },
                                         ),
@@ -327,7 +333,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                     MainAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "${state.projects[i]!.name!.length >= 20 ? state.projects[i]!.name!.substring(0, 30).trim() + '...' : state.projects[i]?.name?.trim()}",
+                                                    "${state.projects[i]!.name!.length >= 30 ? state.projects[i]!.name!.substring(0, 29).trim() + '...' : state.projects[i]?.name?.trim()}",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 16),
@@ -359,7 +365,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                 height: 10,
                                               ),
                                               Text(
-                                                "${state.projects[i]!.description!.length >= 30 ? state.projects[i]!.description!.substring(0, 30).toUpperCase().trim() + '...' : state.projects[i]?.description!.toUpperCase().trim()}",
+                                                "${state.projects[i]!.description!.length >= 30 ? state.projects[i]!.description!.substring(0, 29).toUpperCase().trim() + '...' : state.projects[i]?.description!.toUpperCase().trim()}",
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 12),
@@ -381,7 +387,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "${(taskstate is TaskLoadedState) ? (taskstate.tasks!.where((element) => element.isCompleted! && element.taskBelongsTo == project.name).length / taskstate.tasks!.length * 100).ceilToDouble() : 0}%",
+                                              "${project.progress}%",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 17),

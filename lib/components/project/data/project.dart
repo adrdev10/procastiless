@@ -7,12 +7,13 @@ class Project {
   int progress;
   String? priority;
   String? uuid;
+  String? id;
   Project(this.deadline, this.description, this.name, this.priority, this.uuid,
-      this.progress);
+      this.progress, this.id);
 
   factory Project.fromJson(Map<String, dynamic>? json) {
     return Project(json?["deadline"], json?["description"], json?["name"],
-        json?["priority"], json?["uuid"], json?['progress']);
+        json?["priority"], json?["uuid"], json?['progress'], json?["id"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -22,7 +23,8 @@ class Project {
       'deadline': this.deadline,
       'priority': this.priority,
       'progress': this.progress,
-      'uuid': this.uuid
+      'uuid': this.uuid,
+      'id': this.id,
     };
   }
 }

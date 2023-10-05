@@ -23,12 +23,15 @@ void main() async {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<LoginBloc>(create: (context) => loginProvider),
-      BlocProvider<ProjectBloc>(
-        create: (context) =>
-            ProjectBloc(ProjectLoadingState(), loginProvider.state),
-      ),
       BlocProvider<TaskBloc>(
-          create: (context) => TaskBloc(TaskZeroState(), loginProvider.state))
+          create: (context) => TaskBloc(TaskZeroState(), loginProvider.state)),
+      BlocProvider<ProjectBloc>(
+        create: (context) => ProjectBloc(
+          ProjectLoadingState(),
+          BlocProvider.of<LoginBloc>(context).state,
+          BlocProvider.of<TaskBloc>(context), // Pass TaskBloc here
+        ),
+      ),
     ],
     child: MaterialApp(
         debugShowCheckedModeBanner: false,

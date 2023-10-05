@@ -360,7 +360,8 @@ class NewProjectState extends State<NewProject>
                                           textEditingControllerName?.text,
                                           priority,
                                           "",
-                                          0);
+                                          0,
+                                          "");
                                       context
                                           .read<ProjectBloc>()
                                           .add(new CreateProjectEvent(project));

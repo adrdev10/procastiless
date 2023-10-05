@@ -5,21 +5,22 @@ abstract class TaskBaseState extends Equatable {}
 
 class TaskLoadingState extends TaskBaseState {
   @override
-  // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
 
 class TaskLoadedState extends TaskBaseState {
-  List<Task>? tasks;
-  TaskLoadedState(this.tasks);
+  final List<Task> tasks;
+  TaskLoadedState({required this.tasks});
+
+  TaskLoadedState addTasks(List<Task> newTasks) {
+    return TaskLoadedState(tasks: [...tasks, ...newTasks]);
+  }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [tasks];
 }
 
 class TaskZeroState extends TaskBaseState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }

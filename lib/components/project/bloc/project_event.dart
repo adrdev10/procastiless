@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:procastiless/components/project/data/project.dart';
 
 abstract class ProjectEvents {}
@@ -20,3 +22,10 @@ class DeleteProjectEvent extends ProjectEvents {
 }
 
 class UpdateProjetEvent extends ProjectEvents {}
+
+class UpdateProjectCompletedTaskCount extends ProjectEvents {
+  final String projectId;
+  final double completedTaskCount;
+
+  UpdateProjectCompletedTaskCount(this.completedTaskCount, this.projectId);
+}

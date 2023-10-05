@@ -12,7 +12,7 @@ import 'package:checkmark/checkmark.dart';
 
 class SingleProjectScreen extends StatefulWidget {
   Project? project;
-  SingleProjectScreen(this.project);
+  SingleProjectScreen(this.project, List<Task> tasks);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -43,7 +43,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    context.read<TaskBloc>().add(new FetchTaskEvent(widget.project?.uuid));
+    context.read<TaskBloc>().add(new FetchTaskEvent(widget.project?.id));
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
@@ -82,11 +82,10 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                             isCompleted: false,
                                             name: taskName.text,
                                             overview: 'nothing',
-                                            taskBelongsTo:
-                                                widget.project?.uuid);
+                                            taskBelongsTo: widget.project?.id);
                                         context.read<TaskBloc>().add(
                                             new CreateTaskEvent(
-                                                task, widget.project?.uuid));
+                                                task, widget.project?.id));
                                         taskName.clear();
                                         Navigator.pop(context);
                                       },
@@ -144,7 +143,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                     Text("Progress "),
                     if (state is TaskLoadedState)
                       Text(
-                          "${((state.tasks!.where((element) => element.isCompleted!).length / (state).tasks!.length) * 100).toInt()}%")
+                          "${state.tasks.isEmpty ? 0 : ((state.tasks.where((element) => element.isCompleted!).length / (state).tasks.length) * 100).toInt()}%")
                     else
                       Text("${0}%")
                   ],
@@ -287,7 +286,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                             context.read<TaskBloc>().add(
                                                 new DeleteTaskEvent(
                                                     state.tasks![i].name!,
-                                                    widget.project?.name));
+                                                    widget.project?.id));
                                           },
                                           backgroundColor: Color(0xFFFE4A49),
                                           foregroundColor: Colors.white,
@@ -308,10 +307,8 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                             task.isCompleted =
                                                 !(task.isCompleted)!;
                                             context.read<TaskBloc>().add(
-                                                UpdateTaskEvent(
-                                                    task.name!,
-                                                    widget.project?.name,
-                                                    task));
+                                                UpdateTaskEvent(task.name!,
+                                                    widget.project?.id, task));
                                           },
                                           backgroundColor:
                                               (state.tasks![i].isCompleted!)

@@ -1,18 +1,53 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
+import 'package:procastiless/components/project/bloc/task_bloc.dart';
+import 'package:procastiless/components/project/bloc/task_state.dart';
 import 'package:procastiless/components/project/data/project.dart';
+import 'package:procastiless/components/project/data/task.dart';
+import 'package:uuid/uuid.dart';
 
 class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   LoginState _loginBloc;
-  ProjectBloc(ProjectBaseState initialState, LoginState loginBloc)
+  TaskBloc _taskBloc;
+  late StreamSubscription _streamSubscription;
+
+  ProjectBloc(
+      ProjectBaseState initialState, LoginState loginBloc, this._taskBloc)
       : _loginBloc = loginBloc,
-        super(initialState);
+        super(initialState) {
+    _taskBlocSubscription();
+  }
 
   LoginState get loginBloc => _loginBloc;
+
+  void _taskBlocSubscription() {
+    _streamSubscription = _taskBloc.stream.listen((state) {
+      if (state is TaskLoadedState) {
+        var taskPerProjects = <String, List<Task>>{};
+        for (var task in state.tasks) {
+          if (task.taskBelongsTo != null) {
+            taskPerProjects.putIfAbsent(task.taskBelongsTo!, () => []);
+            taskPerProjects[task.taskBelongsTo]!.add(task);
+          }
+        }
+        for (var entry in taskPerProjects.entries) {
+          var completedTasks = (entry.value
+                      .where((element) => element.isCompleted == true)
+                      .length /
+                  entry.value.length) *
+              100.toDouble();
+          add(UpdateProjectCompletedTaskCount(completedTasks, entry.key));
+        }
+      }
+    });
+  }
 
   @override
   Stream<ProjectBaseState> mapEventToState(ProjectEvents event) async* {
@@ -29,6 +64,25 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
         _deleteProject(states, (event as DeleteProjectEvent).project);
         break;
       case ReloadProjectEvent:
+        break;
+      case UpdateProjectCompletedTaskCount:
+        if (state is ProjectLoadedState) {
+          final updatedCount =
+              (event as UpdateProjectCompletedTaskCount).completedTaskCount;
+          final projectIdToUpdate = event.projectId;
+          List<Project?> updatedProjects =
+              (state as ProjectLoadedState).projects.map((project) {
+            if (project?.id == projectIdToUpdate) {
+              project?.progress = updatedCount.toInt();
+              return project;
+            }
+            return project;
+          }).toList();
+          if (!listEquals(
+              (state as ProjectLoadedState).projects, updatedProjects)) {
+            states.add(ProjectLoadedState(updatedProjects));
+          }
+        }
         break;
       default:
         break;
@@ -78,7 +132,9 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
   }
 
   Future<bool> createProject(Project? project) async {
+    var uuid = Uuid();
     project?.uuid = (loginBloc as LoggedIn).accountUser?.uuid;
+    project?.id = uuid.v4();
     var projectAdded =
         await firestore.collection('project').add(project!.toJson());
     return projectAdded != null;

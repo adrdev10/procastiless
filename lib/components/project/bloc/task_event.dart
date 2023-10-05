@@ -4,17 +4,15 @@ import 'package:procastiless/components/project/data/task.dart';
 abstract class TaskEvents extends Equatable {}
 
 class FetchTaskEvent extends TaskEvents {
-  String? projectUUID;
-  FetchTaskEvent(this.projectUUID);
+  String? id;
+  FetchTaskEvent(this.id);
 
   @override
-  // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
 
 class ReloadTaskEvent extends TaskEvents {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -24,18 +22,16 @@ class CreateTaskEvent extends TaskEvents {
   CreateTaskEvent(this.task, this.currentProject);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [task];
 }
 
 class DeleteTaskEvent extends TaskEvents {
   String taskName;
-  String? currentProject;
-  DeleteTaskEvent(this.taskName, this.currentProject);
+  String? projectUUID;
+  DeleteTaskEvent(this.taskName, this.projectUUID);
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [taskName, currentProject];
+  List<Object?> get props => [taskName, projectUUID];
 }
 
 class UpdateTaskEvent extends TaskEvents {
@@ -44,6 +40,13 @@ class UpdateTaskEvent extends TaskEvents {
   Task? task;
   UpdateTaskEvent(this.taskName, this.currentProject, this.task);
   @override
-  // TODO: implement props
   List<Object?> get props => [taskName, currentProject, task];
+}
+
+// ignore: must_be_immutable
+class FetchAllTasks extends TaskEvents {
+  List<String?> projectIds;
+  FetchAllTasks(this.projectIds);
+  @override
+  List<Object?> get props => [projectIds];
 }
