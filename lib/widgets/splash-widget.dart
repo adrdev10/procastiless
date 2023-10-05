@@ -27,7 +27,6 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     defineRoutes(router);
     ticker().then((value) => router.navigateTo(context, "/login",
@@ -37,7 +36,6 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       child: Center(
         child: SizedBox(

@@ -21,7 +21,6 @@ class CalendarScreenState extends State<CalendarScreen> {
   List<DateTime>? date = List.empty(growable: true);
   @override
   void didChangeDependencies() {
-    // TODO: implement initState
     super.didChangeDependencies();
     final projectBloc = (BlocProvider.of<ProjectBloc>(context).state);
     if (projectBloc is ProjectLoadedState) {
@@ -50,8 +49,6 @@ class CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return BlocBuilder<ProjectBloc, ProjectBaseState>(
       builder: (context, state) {
         print(projects);
@@ -63,7 +60,7 @@ class CalendarScreenState extends State<CalendarScreen> {
             accent: Color(0xff243C51),
             locale: "en_US",
             firstDate: DateTime.now().subtract(Duration(days: 365)),
-            lastDate: lastDate != null ? lastDate : DateTime.now(),
+            lastDate: lastDate,
             selectedDate: lastDate,
             events: date,
             onDateChanged: (DateTime? value) {

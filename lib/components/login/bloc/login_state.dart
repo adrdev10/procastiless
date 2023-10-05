@@ -8,11 +8,10 @@ abstract class LoginState extends Equatable {
 
 class LoggedIn extends LoginState {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  AccountUser? accountUser;
+  final AccountUser? accountUser;
   LoggedIn(this.accountUser);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [auth, accountUser];
 }
 
@@ -20,7 +19,6 @@ class LoggedOut extends LoginState {
   const LoggedOut();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -30,7 +28,6 @@ class WaitingToLogin extends LoginState {
   const WaitingToLogin();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -38,7 +35,6 @@ class InProcessOfLogin extends LoginState {
   const InProcessOfLogin();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -46,7 +42,6 @@ class InProcessOfLogout extends LoginState {
   const InProcessOfLogout();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -54,7 +49,6 @@ class InRegistrationProcess extends LoginState {
   const InRegistrationProcess();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -62,7 +56,6 @@ class RegistrationSuccess extends LoginState {
   const RegistrationSuccess();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -70,6 +63,5 @@ class RegistrationFailure extends LoginState {
   const RegistrationFailure();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }

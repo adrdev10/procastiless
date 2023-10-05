@@ -4,7 +4,7 @@ import 'package:procastiless/components/project/data/task.dart';
 abstract class TaskEvents extends Equatable {}
 
 class FetchTaskEvent extends TaskEvents {
-  String? id;
+  final String? id;
   FetchTaskEvent(this.id);
 
   @override
@@ -17,8 +17,8 @@ class ReloadTaskEvent extends TaskEvents {
 }
 
 class CreateTaskEvent extends TaskEvents {
-  Task? task;
-  String? currentProject;
+  final Task? task;
+  final String? currentProject;
   CreateTaskEvent(this.task, this.currentProject);
 
   @override
@@ -26,8 +26,8 @@ class CreateTaskEvent extends TaskEvents {
 }
 
 class DeleteTaskEvent extends TaskEvents {
-  String taskName;
-  String? projectUUID;
+  final String taskName;
+  final String? projectUUID;
   DeleteTaskEvent(this.taskName, this.projectUUID);
 
   @override
@@ -35,9 +35,9 @@ class DeleteTaskEvent extends TaskEvents {
 }
 
 class UpdateTaskEvent extends TaskEvents {
-  String taskName;
-  String? currentProject;
-  Task? task;
+  final String taskName;
+  final String? currentProject;
+  final Task? task;
   UpdateTaskEvent(this.taskName, this.currentProject, this.task);
   @override
   List<Object?> get props => [taskName, currentProject, task];

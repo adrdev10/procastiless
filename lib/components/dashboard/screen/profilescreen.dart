@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
-import 'package:procastiless/components/login/screen/LoginScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../login/bloc/login_block.dart';
@@ -48,7 +47,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                 child: GestureDetector(
                   child: Text("Buy me a coffee ❤️"),
                   onTap: () async {
-                    await launch("https://www.buymeacoffee.com/adriandeast");
+                    await launchUrl(
+                        Uri(host: "https://www.buymeacoffee.com/adriandeast"));
                   },
                 ),
                 bottom: 70),
@@ -61,7 +61,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                   ),
                   onPressed: () {
                     context.read<LoginBloc>().add(new LogOutEvent());
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.popUntil(
                           context, ModalRoute.withName('/login'));
                     });

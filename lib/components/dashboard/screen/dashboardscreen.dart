@@ -7,7 +7,6 @@ import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/screen/projectscreen.dart';
 import 'package:procastiless/widgets/addprojectbutton.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class Dashboard extends StatefulWidget {
@@ -21,7 +20,6 @@ class DashboardState extends State<Dashboard> {
   late final List<TargetFocus> targets;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
