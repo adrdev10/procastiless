@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/screen/newproject.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../components/dashboard/screen/dashboardscreen.dart';

@@ -55,7 +55,7 @@ class AvatarSelectorState extends State<AvatarSelector>
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
                     'Time to pick your Procraimon',
-                    style: Theme.of(context).textTheme.bodyText1?.apply(
+                    style: Theme.of(context).textTheme.bodyLarge?.apply(
                         color: Colors.white,
                         fontSizeFactor: 2.8,
                         fontWeightDelta: 50),
@@ -70,7 +70,7 @@ class AvatarSelectorState extends State<AvatarSelector>
                     'This action is irrivertable. Once you pick your avatar you can not change it',
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyLarge
                         ?.apply(color: Colors.white, fontSizeFactor: 1.0),
                   ),
                 ),

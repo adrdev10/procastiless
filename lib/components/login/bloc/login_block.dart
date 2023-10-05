@@ -15,47 +15,43 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     List<LoginState> states = <LoginState>[];
     switch (event.runtimeType) {
       case SignInEvent:
-        _signInEvent(states);
+        yield* _signInEvent(states);
         break;
       case SignUpWithGoogleAuthEvent:
-        _signInWithGoogleEvent(states);
+        yield* _signInWithGoogleEvent(states);
         break;
       case LogOutEvent:
-        _singoutEvent(states);
+        yield* _singoutEvent(states);
         break;
       case SignUpEvent:
         break;
     }
-
-    for (LoginState state in states) {
-      yield state;
-    }
   }
 
-  void _signInEvent(List<LoginState> states) {
-    states.add(InProcessOfLogin());
+  Stream<LoginState> _signInEvent(List<LoginState> states) async* {
+    yield InProcessOfLogin();
     trySignInWithAsAnou();
-    states.add(LoggedIn(null));
+    yield LoggedIn(null);
   }
 
-  void _singoutEvent(List<LoginState> states) {
+  Stream<LoginState> _singoutEvent(List<LoginState> states) async* {
     logoutFromAccount();
-    states.add(InProcessOfLogout());
-    states.add(WaitingToLogin());
+    yield InProcessOfLogout();
+    yield WaitingToLogin();
   }
 
-  void _signInWithGoogleEvent(List<LoginState> states) async {
+  Stream<LoginState> _signInWithGoogleEvent(List<LoginState> states) async* {
     try {
-      emit(InProcessOfLogin());
+      yield InProcessOfLogin();
       var user = await signinWithGoogle();
       if (user != null) {
-        emit(LoggedIn(user));
+        yield LoggedIn(user);
       } else {
-        states.add(WaitingToLogin());
+        yield WaitingToLogin();
       }
     } catch (e) {
       print(e);
-      states.add(WaitingToLogin());
+      yield WaitingToLogin();
     }
   }
 
@@ -115,6 +111,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<AccountUser?> isUserInCollection(UserCredential auth) async {

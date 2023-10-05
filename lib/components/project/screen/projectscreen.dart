@@ -159,7 +159,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                 'Hello 👋',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1
+                                    .bodyLarge
                                     ?.apply(
                                         fontSizeFactor: 1.65,
                                         fontWeightDelta: 30,
@@ -169,7 +169,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                 '${state.accountUser?.name}',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText2
+                                    .bodyMedium
                                     ?.apply(fontSizeFactor: 2.3),
                               )
                             ],
@@ -233,7 +233,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                       state.projects[i]!.progress,
                                       state.projects[i]!.id);
                                   if (taskstate is TaskLoadedState) {
-                                    tasks = taskstate.tasks!
+                                    tasks = taskstate.tasks
                                         .where((element) =>
                                             element.taskBelongsTo == project.id)
                                         .toList();
@@ -262,7 +262,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                 "Do you want to delete this project?",
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .bodyText1
+                                                    .bodyLarge
                                                     ?.apply(
                                                         fontSizeFactor: 1.65,
                                                         color: Colors.white,

@@ -35,7 +35,6 @@ class NewProjectState extends State<NewProject>
   ScrollPhysics physicsPage = NeverScrollableScrollPhysics();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     textEditingControllerName = TextEditingController();
     textEditingControllerTime = TextEditingController();
@@ -87,7 +86,7 @@ class NewProjectState extends State<NewProject>
                         'Create new project',
                         style: Theme.of(context)
                             .textTheme
-                            .headline3
+                            .displaySmall
                             ?.apply(color: Color(0xff243C51)),
                       ),
                     ),
@@ -98,7 +97,7 @@ class NewProjectState extends State<NewProject>
                       'Enter Project Name',
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText1
+                          .bodyLarge
                           ?.apply(color: Colors.grey),
                     ),
                     TextField(
@@ -129,7 +128,7 @@ class NewProjectState extends State<NewProject>
                       'Project Deadline',
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText1
+                          .bodyLarge
                           ?.apply(color: Colors.grey),
                     ),
                     Row(
@@ -325,7 +324,7 @@ class NewProjectState extends State<NewProject>
                               'Project description',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodyLarge
                                   ?.apply(color: Colors.grey, fontSizeDelta: 3),
                             ),
                             Container(

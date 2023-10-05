@@ -10,7 +10,7 @@ class LoginScreenTop extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .apply(fontSizeFactor: 2.2, fontSizeDelta: .3)
-              .headline5,
+              .headlineSmall,
         ),
         SizedBox(
           height: 40,
@@ -25,7 +25,7 @@ class LoginScreenTop extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .apply(fontSizeFactor: 1.3, fontSizeDelta: 4.2)
-                  .bodyText2,
+                  .bodyMedium,
             ),
             TextSpan(
               text: ' way to get things done',

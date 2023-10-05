@@ -10,6 +10,7 @@ import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
 import 'package:procastiless/components/project/data/project.dart';
 import 'package:procastiless/components/project/data/task.dart';
+import 'package:procastiless/components/project/screen/projectscreen.dart';
 import 'package:uuid/uuid.dart';
 
 class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
@@ -102,12 +103,15 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
   void _fetchProjects(List<ProjectBaseState> states,
       [ProjectEvents? event]) async {
     try {
+      // ignore: invalid_use_of_visible_for_testing_member
       emit(ProjectLoadingState());
       var userProjects = await fetchProjectsFromFirestore();
       if (userProjects.length < 1) {
+        // ignore: invalid_use_of_visible_for_testing_member
         emit(ProjectZeroState());
         return;
       }
+      // ignore: invalid_use_of_visible_for_testing_member
       emit(ProjectLoadedState(userProjects));
     } catch (e) {
       print(e);
@@ -143,6 +147,7 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
     project?.id = uuid.v4();
     var projectAdded =
         await firestore.collection('project').add(project!.toJson());
+    // ignore: unnecessary_null_comparison
     return projectAdded != null;
   }
 
@@ -165,5 +170,26 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
       await project.reference.delete();
     }
     return true;
+  }
+
+  @override
+  void onTransition(Transition<ProjectEvents, ProjectBaseState> transition) {
+    // TODO: implement onTransition
+    super.onTransition(transition);
+    print(transition);
+  }
+
+  @override
+  void onChange(Change<ProjectBaseState> change) {
+    // TODO: implement onChange
+    super.onChange(change);
+    print(change);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    // TODO: implement onError
+    super.onError(error, stackTrace);
+    print(error);
   }
 }
