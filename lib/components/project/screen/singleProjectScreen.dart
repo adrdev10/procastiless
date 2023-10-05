@@ -157,10 +157,10 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                       color: Color(0xff243C51),
                       backgroundColor: Color(0xff5686b0),
                       value: (state is TaskLoadedState)
-                          ? (state.tasks!
+                          ? (state.tasks
                                   .where((element) => element.isCompleted!)
                                   .length /
-                              (state).tasks!.length)
+                              (state).tasks.length)
                           : 0,
                       minHeight: 13,
                     ),
@@ -226,10 +226,10 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                             ),
                             if (state is TaskLoadedState &&
                                 state.tasks
-                                        ?.where(
+                                        .where(
                                             (element) => element.isCompleted!)
                                         .length ==
-                                    state.tasks!.length)
+                                    state.tasks.length)
                               Text("Finished")
                             else if (state is TaskLoadedState)
                               Text("In Progress")
@@ -260,7 +260,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: ListView.builder(
-                            itemCount: state.tasks?.length,
+                            itemCount: state.tasks.length,
                             itemBuilder: (context, i) {
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 15),
@@ -281,7 +281,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                           onPressed: (BuildContext context) {
                                             context.read<TaskBloc>().add(
                                                 new DeleteTaskEvent(
-                                                    state.tasks![i].name!,
+                                                    state.tasks[i].name!,
                                                     widget.project?.id));
                                           },
                                           backgroundColor: Color(0xFFFE4A49),
@@ -299,7 +299,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                           // An action can be bigger than the others.
                                           flex: 2,
                                           onPressed: (BuildContext context) {
-                                            final task = state.tasks![i];
+                                            final task = state.tasks[i];
                                             task.isCompleted =
                                                 !(task.isCompleted)!;
                                             context.read<TaskBloc>().add(
@@ -307,15 +307,15 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                                     widget.project?.id, task));
                                           },
                                           backgroundColor:
-                                              (state.tasks![i].isCompleted!)
+                                              (state.tasks[i].isCompleted!)
                                                   ? Colors.grey
                                                   : Color(0xFF7BC043),
                                           foregroundColor: Colors.white,
-                                          icon: (state.tasks![i].isCompleted!)
+                                          icon: (state.tasks[i].isCompleted!)
                                               ? Icons.check_circle
                                               : Icons
                                                   .check_box_outline_blank_rounded,
-                                          label: (state.tasks![i].isCompleted!)
+                                          label: (state.tasks[i].isCompleted!)
                                               ? "Mark undone"
                                               : 'Mark done',
                                         ),
@@ -338,7 +338,7 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                               width: 20,
                                               child: CheckMark(
                                                 active: (state
-                                                    .tasks![i].isCompleted!),
+                                                    .tasks[i].isCompleted!),
                                                 duration: const Duration(
                                                     milliseconds: 500),
                                                 curve: Curves.decelerate,
@@ -352,10 +352,10 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
                                             height: 40,
                                             alignment: Alignment.center,
                                             child: Text(
-                                              "${state.tasks?[i].name}",
+                                              "${state.tasks[i].name}",
                                               style: TextStyle(
                                                   fontSize: 15,
-                                                  decoration: (state.tasks![i]
+                                                  decoration: (state.tasks[i]
                                                           .isCompleted!)
                                                       ? TextDecoration
                                                           .lineThrough
