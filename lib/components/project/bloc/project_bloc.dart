@@ -27,6 +27,12 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
 
   LoginState get loginBloc => _loginBloc;
 
+  @override
+  Future<void> close() {
+    _streamSubscription.cancel();
+    return super.close();
+  }
+
   void _taskBlocSubscription() {
     _streamSubscription = _taskBloc.stream.listen((state) {
       if (state is TaskLoadedState) {

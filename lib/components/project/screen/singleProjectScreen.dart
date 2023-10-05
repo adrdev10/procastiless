@@ -11,11 +11,10 @@ import 'package:procastiless/components/project/data/task.dart';
 import 'package:checkmark/checkmark.dart';
 
 class SingleProjectScreen extends StatefulWidget {
-  Project? project;
+  final Project? project;
   SingleProjectScreen(this.project, List<Task> tasks);
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return SingleProjectScreenState();
   }
 }
@@ -26,7 +25,6 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
   TextEditingController taskName = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     title.text = widget.project!.name!;
     description.text = widget.project!.description!;
@@ -34,7 +32,6 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -42,7 +39,6 @@ class SingleProjectScreenState extends State<SingleProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     context.read<TaskBloc>().add(new FetchTaskEvent(widget.project?.id));
     return Scaffold(
       resizeToAvoidBottomInset: false,
