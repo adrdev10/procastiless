@@ -2,13 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:procastiless/components/dashboard/screen/dashboardscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
+import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/login/screen/LoginScreen.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
 import 'package:procastiless/widgets/splash-widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'components/project/bloc/project_state.dart';
 import 'config/themes/maintheme.dart';
@@ -19,6 +22,7 @@ void main() async {
   ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   var loginProvider = LoginBloc(WaitingToLogin());
   runApp(MultiBlocProvider(
     providers: [
@@ -34,13 +38,25 @@ void main() async {
       ),
     ],
     child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        routes: {'/login': (context) => LoginScreen()},
-        theme: MainTheme().getTheme(),
-        title: 'Procastiless',
-        home: Scaffold(
-          body: SafeArea(child: SplashScreen()),
-        )),
+      debugShowCheckedModeBanner: false,
+      routes: {'/login': (context) => LoginScreen()},
+      theme: MainTheme().getTheme(),
+      title: 'Procastiless',
+      home: StreamBuilder<User?>(
+        stream: _firebaseAuth.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.data != null) {
+              context.read<LoginBloc>().add(new SignUpWithGoogleAuthEvent());
+              return Dashboard(); // Navigates if user is logged in.
+            } else {
+              return LoginScreen(); // Navigates if user is not logged in.
+            }
+          }
+          return SplashScreen(); // Returns a splash screen while waiting for connection.
+        },
+      ),
+    ),
   ));
 }
 
