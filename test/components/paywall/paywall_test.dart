@@ -65,7 +65,7 @@ void main() {
     );
 
     blocTest<PaywallBloc, PaywallState>(
-      "when user activates paywall, then verify bloc emits [PaywallOffersLoading, PaywallOfferLoaded] 2",
+      "when data for offers is incorrect, then verify parsing error occurs and bloc emits [PaywallOffersLoading, PaywallError] 2",
       build: () {
         setupMockQueryDocumentSnapshot({
           'efr': ['value 1'],
@@ -78,7 +78,10 @@ void main() {
         return paywallBloc;
       },
       act: (bloc) => bloc.add(GetPaywallOfferEvent()),
-      expect: () => [PaywallOffersLoading(), PaywallError("")],
+      expect: () => [
+        PaywallOffersLoading(),
+        PaywallError("type 'Null' is not a subtype of type 'List<String>'")
+      ],
     );
   });
 }
