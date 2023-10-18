@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 abstract class LoginEvents {}
 
 class SignInEvent extends LoginEvents {}

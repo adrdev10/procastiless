@@ -5,7 +5,6 @@ import 'package:procastiless/components/dashboard/screen/profilescreen.dart';
 import 'package:procastiless/components/dashboard/screen/statsscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
-import 'package:procastiless/components/login/screen/LoginScreen.dart';
 import 'package:procastiless/components/project/screen/projectscreen.dart';
 import 'package:procastiless/widgets/addprojectbutton.dart';
 import 'package:procastiless/widgets/avatarselection.dart';

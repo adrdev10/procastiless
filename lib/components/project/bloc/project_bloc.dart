@@ -173,21 +173,18 @@ class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {
 
   @override
   void onTransition(Transition<ProjectEvents, ProjectBaseState> transition) {
-    // TODO: implement onTransition
     super.onTransition(transition);
     print(transition);
   }
 
   @override
   void onChange(Change<ProjectBaseState> change) {
-    // TODO: implement onChange
     super.onChange(change);
     print(change);
   }
 
   @override
   void onError(Object error, StackTrace stackTrace) {
-    // TODO: implement onError
     super.onError(error, stackTrace);
     print(error);
   }

@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:procastiless/components/paywall/bloc/PaywallBloc.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:procastiless/components/paywall/bloc/PaywallEvents.dart';

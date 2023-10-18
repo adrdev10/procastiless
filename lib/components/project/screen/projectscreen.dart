@@ -427,7 +427,6 @@ class ProjectScreenState extends State<ProjectScreen> {
     switch (priority) {
       case "HIGH":
         return Colors.red;
-        ;
       case "MEDIUM":
         return Color(0xffE4C864);
       default:
