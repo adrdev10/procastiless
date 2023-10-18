@@ -11,8 +11,8 @@ import 'package:procastiless/components/project/bloc/project_state.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_event.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
-import 'package:procastiless/components/project/data/project.dart';
-import 'package:procastiless/components/project/data/task.dart';
+import 'package:procastiless/components/project/models/project.dart';
+import 'package:procastiless/components/project/models/task.dart';
 import 'package:procastiless/components/project/screen/singleProjectScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -348,7 +348,9 @@ class ProjectScreenState extends State<ProjectScreen> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      color: Color(0xffE4C864),
+                                                      color: getPriorityColor(
+                                                          state.projects[i]
+                                                              ?.priority),
                                                     ),
                                                     child: Center(
                                                       child: Text(
@@ -419,5 +421,17 @@ class ProjectScreenState extends State<ProjectScreen> {
         );
       },
     );
+  }
+
+  getPriorityColor(String? priority) {
+    switch (priority) {
+      case "HIGH":
+        return Colors.red;
+        ;
+      case "MEDIUM":
+        return Color(0xffE4C864);
+      default:
+        return Color(0xff64C6E4);
+    }
   }
 }

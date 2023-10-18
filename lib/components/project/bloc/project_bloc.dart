@@ -8,8 +8,8 @@ import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
-import 'package:procastiless/components/project/data/project.dart';
-import 'package:procastiless/components/project/data/task.dart';
+import 'package:procastiless/components/project/models/project.dart';
+import 'package:procastiless/components/project/models/task.dart';
 import 'package:uuid/uuid.dart';
 
 class ProjectBloc extends Bloc<ProjectEvents, ProjectBaseState> {

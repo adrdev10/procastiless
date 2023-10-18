@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/bloc/task_event.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
-import 'package:procastiless/components/project/data/task.dart';
+import 'package:procastiless/components/project/models/task.dart';
 
 class TaskBloc extends Bloc<TaskEvents, TaskBaseState> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;

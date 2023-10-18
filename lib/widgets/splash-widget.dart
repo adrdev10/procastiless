@@ -42,6 +42,7 @@ class SplashScreenState extends State<SplashScreen> {
             width: MediaQuery.of(context).size.width,
             child: Center(
               child: TextLiquidFill(
+                loadDuration: Duration(milliseconds: 500),
                 waveColor: Color(0xff3378B8),
                 boxBackgroundColor: Colors.white,
                 textStyle: TextStyle(

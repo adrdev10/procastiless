@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:procastiless/components/project/data/task.dart';
+import 'package:procastiless/components/project/models/task.dart';
 
 abstract class TaskBaseState extends Equatable {}
 

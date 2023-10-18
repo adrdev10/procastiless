@@ -1,4 +1,4 @@
-import 'package:procastiless/components/project/data/project.dart';
+import 'package:procastiless/components/project/models/project.dart';
 
 abstract class ProjectBaseState {}
 

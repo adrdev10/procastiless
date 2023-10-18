@@ -18,14 +18,22 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         yield* _signInEvent(states);
         break;
       case SignUpWithGoogleAuthEvent:
-        yield* _signInWithGoogleEvent(states);
+        yield* _signInWithGoogleEvent();
         break;
       case LogOutEvent:
-        yield* _singoutEvent(states);
+        yield* _singoutEvent();
+        break;
+      case CheckIfAccountExist:
+        yield* _checkIfAccountExistInDB((event as CheckIfAccountExist).uid);
         break;
       case SignUpEvent:
         break;
     }
+  }
+
+  Stream<LoginState> _checkIfAccountExistInDB(String uid) async* {
+    var user = await isUserInCollection(uid);
+    yield LoggedIn(user);
   }
 
   Stream<LoginState> _signInEvent(List<LoginState> states) async* {
@@ -34,13 +42,13 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     yield LoggedIn(null);
   }
 
-  Stream<LoginState> _singoutEvent(List<LoginState> states) async* {
+  Stream<LoginState> _singoutEvent() async* {
     logoutFromAccount();
     yield InProcessOfLogout();
     yield WaitingToLogin();
   }
 
-  Stream<LoginState> _signInWithGoogleEvent(List<LoginState> states) async* {
+  Stream<LoginState> _signInWithGoogleEvent() async* {
     try {
       yield InProcessOfLogin();
       var user = await signinWithGoogle();
@@ -81,7 +89,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
       var authresult =
           await FirebaseAuth.instance.signInWithCredential(credential);
       //Check if user exists in DB
-      userInCollection = await isUserInCollection(authresult);
+      userInCollection = await isUserInCollection(authresult.user?.uid ?? "");
       if (userInCollection == null) {
         //Create new user in DB and update the bloc state
         userInCollection = addUser(authresult);
@@ -114,8 +122,8 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     return null;
   }
 
-  Future<AccountUser?> isUserInCollection(UserCredential auth) async {
-    final cRef = await store.collection('users').doc(auth.user?.uid).get();
+  Future<AccountUser?> isUserInCollection(String uuid) async {
+    final cRef = await store.collection('users').doc(uuid).get();
     try {
       if (cRef.exists) {
         final user = AccountUser.fromJson(cRef.data());
