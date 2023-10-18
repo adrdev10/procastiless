@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:procastiless/components/project/models/project.dart';
+import 'package:procastiless/components/project/models/task.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_event.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
-import 'package:procastiless/components/project/models/project.dart';
-import 'package:procastiless/components/project/models/task.dart';
 import 'package:checkmark/checkmark.dart';
 
 class SingleProjectScreen extends StatefulWidget {
