@@ -21,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         yield* _signInWithGoogleEvent();
         break;
       case LogOutEvent:
-        yield* _singoutEvent();
+        yield* _signoutEvent();
         break;
       case CheckIfAccountExist:
         yield* _checkIfAccountExistInDB((event as CheckIfAccountExist).uid);
@@ -42,7 +42,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     yield LoggedIn(null);
   }
 
-  Stream<LoginState> _singoutEvent() async* {
+  Stream<LoginState> _signoutEvent() async* {
     logoutFromAccount();
     yield InProcessOfLogout();
     yield WaitingToLogin();
