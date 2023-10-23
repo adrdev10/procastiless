@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/project_event.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
-import 'package:procastiless/components/project/data/project.dart';
+import 'package:procastiless/components/project/models/project.dart';
 
 class NewProject extends StatefulWidget {
   @override

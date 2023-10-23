@@ -50,7 +50,12 @@ dependencies:
   fluttertoast: ^8.1.2
   foundation_flutter: ^0.2.0
   firebase_analytics: ^10.5.1
+  confetti: ^0.7.0
   uuid: ^3.0.7
+  in_app_purchase: ^3.1.11
+  bloc_test: ^8.0.0
+  mockito: ^5.4.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

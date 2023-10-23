@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/project_state.dart';
-import 'package:procastiless/components/project/data/project.dart';
+import 'package:procastiless/components/project/models/project.dart';
 
 class CalendarScreen extends StatefulWidget {
   @override

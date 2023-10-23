@@ -11,3 +11,8 @@ class SetUpAvatarEvent extends LoginEvents {}
 class SignUpWithGoogleAuthEvent extends LoginEvents {}
 
 class DeleteAccountEvent extends LoginEvents {}
+
+class CheckIfAccountExist extends LoginEvents {
+  final String uid;
+  CheckIfAccountExist(this.uid);
+}

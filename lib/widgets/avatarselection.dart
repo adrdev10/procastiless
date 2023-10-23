@@ -128,13 +128,13 @@ class AvatarSelectorState extends State<AvatarSelector>
                       if (state is LoggedIn) {
                         if (selectedAvatar == 0) {
                           state.accountUser?.avatarUrl =
-                              'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/Group.png?alt=media&token=f5dd18ed-1a3b-403a-aeb0-4db2d1785e3a';
+                              'https://firebasestorage.googleapis.com/v0/b/procastiless.appspot.com/o/Group.png?alt=media&token=d835bde2-e773-4307-8b7b-886d601ba123&_gl=1*ecdhs9*_ga*OTc3MjI4NzQxLjE2OTYzMDUyNDU.*_ga_CW55HF8NVT*MTY5Njk3ODk4Mi42LjEuMTY5Njk3OTYxNi41NC4wLjA.';
                         } else if (selectedAvatar == 1) {
                           state.accountUser?.avatarUrl =
-                              'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/icon-vezt-character-map%204.png?alt=media&token=902126c5-21ba-41cb-b551-9d7a213d3c18';
+                              'https://firebasestorage.googleapis.com/v0/b/procastiless.appspot.com/o/g10.png?alt=media&token=9ae4dc36-2eb2-4fb6-bb1b-8b876d30894a&_gl=1*1xuh4zl*_ga*OTc3MjI4NzQxLjE2OTYzMDUyNDU.*_ga_CW55HF8NVT*MTY5Njk3ODk4Mi42LjEuMTY5Njk3OTY0NS4yNS4wLjA.';
                         } else {
                           state.accountUser?.avatarUrl =
-                              'https://firebasestorage.googleapis.com/v0/b/procastiless-6c5f4.appspot.com/o/g10.png?alt=media&token=4c8d6f7d-4c26-42cb-ae94-e7b035f3a475';
+                              'https://firebasestorage.googleapis.com/v0/b/procastiless.appspot.com/o/icon-vezt-character-map_4.png?alt=media&token=52d2bb03-f2dd-4ada-b0e0-aeffe93172d1&_gl=1*1gcc0in*_ga*OTc3MjI4NzQxLjE2OTYzMDUyNDU.*_ga_CW55HF8NVT*MTY5Njk3ODk4Mi42LjEuMTY5Njk3OTY2MC4xMC4wLjA.';
                         }
                       }
                       if ((state as LoggedIn).auth.currentUser?.uid != null) {
