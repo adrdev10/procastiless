@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:procastiless/components/calendar/calendarscreen.dart';
 import 'package:procastiless/components/dashboard/screen/profilescreen.dart';
 import 'package:procastiless/components/dashboard/screen/statsscreen.dart';
 import 'package:procastiless/components/login/bloc/login_block.dart';
+import 'package:procastiless/components/login/bloc/login_event.dart';
 import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/project/screen/projectscreen.dart';
 import 'package:procastiless/widgets/addprojectbutton.dart';
@@ -18,105 +21,130 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   int currentPageSelected = 0;
   TutorialSettigns tutorialSettigns = new TutorialSettigns(true, true);
+  // ignore: unused_field
+  Timer? _paywallTimer;
   late final List<TargetFocus> targets;
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration(seconds: 5), () {
+      var state = context.read<LoginBloc>().state;
+      if (state is LoggedIn) {
+        context
+            .read<LoginBloc>()
+            .add(CheckForPaywallUser(state.accountUser?.uuid ?? ""));
+      }
+    });
+  }
+
+  showPaywall() {
+    Navigator.of(context).pushNamed("/paywall");
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        if (state is LoggedIn &&
-            state.accountUser?.avatarUrl?.isNotEmpty == true) {
-          return Scaffold(
-              floatingActionButton: AddProjectButton(tutorialSettigns),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              bottomNavigationBar: Container(
-                decoration: BoxDecoration(
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state is LoggedIn && state.isPayingUser == false) {
+          _paywallTimer = Timer(Duration(milliseconds: 4000), showPaywall);
+        }
+      },
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          if (state is LoggedIn &&
+              state.accountUser?.avatarUrl?.isNotEmpty == true) {
+            return Scaffold(
+                floatingActionButton: AddProjectButton(tutorialSettigns),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                bottomNavigationBar: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black45,
+                            blurRadius: 1,
+                            spreadRadius: 0)
+                      ]),
+                  child: ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black45, blurRadius: 1, spreadRadius: 0)
-                    ]),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  child: BottomNavigationBar(
-                    backgroundColor: Colors.white,
-                    iconSize: 25,
-                    elevation: 999,
-                    type: BottomNavigationBarType.fixed,
-                    currentIndex: currentPageSelected,
-                    selectedLabelStyle:
-                        TextStyle(color: Color(0xff65ACEB), fontSize: 10),
-                    unselectedItemColor: Color(0xff65ACEB),
-                    unselectedFontSize: 10,
-                    items: [
-                      BottomNavigationBarItem(
-                        label: '',
-                        activeIcon: getShaderMask(Icons.house_rounded),
-                        icon:
-                            Icon(Icons.house_rounded, color: Color(0xffd5d7e3)),
-                      ),
-                      BottomNavigationBarItem(
-                          activeIcon:
-                              getShaderMask(Icons.calendar_today_rounded),
+                    child: BottomNavigationBar(
+                      backgroundColor: Colors.white,
+                      iconSize: 25,
+                      elevation: 999,
+                      type: BottomNavigationBarType.fixed,
+                      currentIndex: currentPageSelected,
+                      selectedLabelStyle:
+                          TextStyle(color: Color(0xff65ACEB), fontSize: 10),
+                      unselectedItemColor: Color(0xff65ACEB),
+                      unselectedFontSize: 10,
+                      items: [
+                        BottomNavigationBarItem(
                           label: '',
-                          icon: Icon(
-                            Icons.calendar_today_rounded,
-                            color: Color(0xffd5d7e3),
-                          )),
-                      BottomNavigationBarItem(
-                          activeIcon: getShaderMask(Icons.analytics),
-                          label: '',
-                          icon: Icon(
-                            Icons.analytics,
-                            color: Color(0xffd5d7e3),
-                          )),
-                      BottomNavigationBarItem(
-                          activeIcon: getShaderMask(Icons.person),
-                          label: '',
-                          icon: Icon(
-                            Icons.person,
-                            color: Color(0xffd5d7e3),
-                          )),
-                    ],
-                    onTap: (index) {
-                      setState(() {
-                        currentPageSelected = index;
-                      });
-                    },
+                          activeIcon: getShaderMask(Icons.house_rounded),
+                          icon: Icon(Icons.house_rounded,
+                              color: Color(0xffd5d7e3)),
+                        ),
+                        BottomNavigationBarItem(
+                            activeIcon:
+                                getShaderMask(Icons.calendar_today_rounded),
+                            label: '',
+                            icon: Icon(
+                              Icons.calendar_today_rounded,
+                              color: Color(0xffd5d7e3),
+                            )),
+                        BottomNavigationBarItem(
+                            activeIcon: getShaderMask(Icons.analytics),
+                            label: '',
+                            icon: Icon(
+                              Icons.analytics,
+                              color: Color(0xffd5d7e3),
+                            )),
+                        BottomNavigationBarItem(
+                            activeIcon: getShaderMask(Icons.person),
+                            label: '',
+                            icon: Icon(
+                              Icons.person,
+                              color: Color(0xffd5d7e3),
+                            )),
+                      ],
+                      onTap: (index) {
+                        setState(() {
+                          currentPageSelected = index;
+                        });
+                      },
+                    ),
                   ),
                 ),
+                body: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (currentPageSelected == 0)
+                      ProjectScreen(tutorialSettigns),
+                    if (currentPageSelected == 1) CalendarScreen(),
+                    if (currentPageSelected == 2) StatsScreen(),
+                    if (currentPageSelected == 3)
+                      Center(child: ProfileScreen()),
+                  ],
+                ));
+          } else if (state is LoggedIn &&
+              state.accountUser?.avatarUrl?.isEmpty == true) {
+            return AvatarSelector();
+          } else {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
               ),
-              body: Stack(
-                alignment: Alignment.center,
-                children: [
-                  if (currentPageSelected == 0) ProjectScreen(tutorialSettigns),
-                  if (currentPageSelected == 1) CalendarScreen(),
-                  if (currentPageSelected == 2) StatsScreen(),
-                  if (currentPageSelected == 3) Center(child: ProfileScreen()),
-                ],
-              ));
-        } else if (state is LoggedIn &&
-            state.accountUser?.avatarUrl?.isEmpty == true) {
-          return AvatarSelector();
-        } else {
-          return Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
     );
   }
 

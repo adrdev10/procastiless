@@ -35,6 +35,8 @@ class UserInProcessOfPaywall extends PaywallState {
 }
 
 class UserRegisteredToPaywalled extends PaywallState {
+  UserRegisteredToPaywalled();
+
   @override
   List<Object?> get props => [];
 }

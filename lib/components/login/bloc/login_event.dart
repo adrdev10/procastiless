@@ -16,3 +16,8 @@ class CheckIfAccountExist extends LoginEvents {
   final String uid;
   CheckIfAccountExist(this.uid);
 }
+
+class CheckForPaywallUser extends LoginEvents {
+  final String uid;
+  CheckForPaywallUser(this.uid);
+}

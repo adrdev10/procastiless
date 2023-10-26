@@ -1,9 +1,31 @@
-abstract class PaywallEvents {}
+import 'package:equatable/equatable.dart';
 
-class GetPaywallOfferEvent extends PaywallEvents {}
+abstract class PaywallEvents extends Equatable {}
 
-class RegisterUserToPaywall extends PaywallEvents {}
+class CheckSubscription extends PaywallEvents {
+  @override
+  List<Object?> get props => [];
+}
 
-class CancelUserFromPaywall extends PaywallEvents {}
+class GetPaywallOfferEvent extends PaywallEvents {
+  @override
+  List<Object?> get props => [];
+}
 
-class RenewUserToPaywall extends PaywallEvents {}
+class RegisterUserToPaywall extends PaywallEvents {
+  final String offerId;
+  RegisterUserToPaywall(this.offerId);
+
+  @override
+  List<Object?> get props => [this.offerId];
+}
+
+class CancelUserFromPaywall extends PaywallEvents {
+  @override
+  List<Object?> get props => [];
+}
+
+class RenewUserToPaywall extends PaywallEvents {
+  @override
+  List<Object?> get props => [];
+}

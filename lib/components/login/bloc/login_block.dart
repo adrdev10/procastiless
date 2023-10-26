@@ -28,7 +28,22 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         break;
       case SignUpEvent:
         break;
+      case CheckForPaywallUser:
+        if (state is LoggedIn) {
+          var isPayingUser =
+              await _checkForPayingUser((event as CheckForPaywallUser).uid);
+          yield (state as LoggedIn).copyWith(isPayingUser: isPayingUser);
+        }
+        break;
     }
+  }
+
+  Future<bool> _checkForPayingUser(String uid) async {
+    final dbCollection = await store.collection('paywall').doc(uid).get();
+    if (dbCollection.exists) {
+      return true;
+    }
+    return false;
   }
 
   Stream<LoginState> _checkIfAccountExistInDB(String uid) async* {
