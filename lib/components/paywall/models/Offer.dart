@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Offer extends Equatable {
-  final List<String> bulletInfo;
+  final List<dynamic> bulletInfo;
   final String description;
   final String name;
   final String offerId;
@@ -10,8 +10,8 @@ class Offer extends Equatable {
   Offer(this.bulletInfo, this.description, this.name, this.offerId, this.price);
 
   factory Offer.offerFromJson(Map<String, dynamic> data) {
-    return Offer(data["bulletInfo"], data["description"], data["name"],
-        data["offerId"], data["price"]);
+    return Offer(data["bullet-points"], data["description"], data["name"],
+        data["offer_id"], data["price"]);
   }
 
   Map<String, dynamic> toJson() {

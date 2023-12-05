@@ -10,6 +10,7 @@ import 'package:procastiless/components/login/bloc/login_state.dart';
 import 'package:procastiless/components/login/screen/LoginScreen.dart';
 import 'package:procastiless/components/paywall/bloc/PaywallBloc.dart';
 import 'package:procastiless/components/paywall/bloc/PaywallState.dart';
+import 'package:procastiless/components/paywall/screens/PaywallScreen.dart';
 import 'package:procastiless/components/project/bloc/project_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_bloc.dart';
 import 'package:procastiless/components/project/bloc/task_state.dart';
@@ -32,7 +33,8 @@ void main() async {
     providers: [
       BlocProvider<LoginBloc>(create: (context) => loginProvider),
       BlocProvider<PaywallBloc>(
-        create: (context) => PaywallBloc(firestore, PaywallIdleState()),
+        create: (context) =>
+            PaywallBloc(firestore, loginProvider, PaywallIdleState()),
       ),
       BlocProvider<TaskBloc>(
           create: (context) => TaskBloc(TaskZeroState(), loginProvider.state)),
@@ -46,7 +48,10 @@ void main() async {
     ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      routes: {'/login': (context) => LoginScreen()},
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/paywall': (context) => PaywallScreen(),
+      },
       theme: MainTheme().getTheme(),
       title: 'Procastiless',
       home: StreamBuilder<User?>(

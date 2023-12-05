@@ -9,10 +9,21 @@ abstract class LoginState extends Equatable {
 class LoggedIn extends LoginState {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final AccountUser? accountUser;
-  LoggedIn(this.accountUser);
+  final bool? isPayingUser;
+  LoggedIn(this.accountUser, {this.isPayingUser});
+
+  LoggedIn copyWith({
+    AccountUser? accountUser,
+    bool? isPayingUser,
+  }) {
+    return LoggedIn(
+      accountUser ?? this.accountUser,
+      isPayingUser: isPayingUser ?? this.isPayingUser,
+    );
+  }
 
   @override
-  List<Object?> get props => [auth, accountUser];
+  List<Object?> get props => [auth, accountUser, isPayingUser];
 }
 
 class LoggedOut extends LoginState {
